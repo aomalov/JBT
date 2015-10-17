@@ -30,11 +30,13 @@ public class TestConnPool extends Thread {
 	public static void main(String[] args) throws CouponSystemException {
 		// TODO Auto-generated method stub
 		
-		ConnectionPool cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 		for(int k=0;k<15;k++){
 			TestConnPool testThread=new TestConnPool("thread "+(k+1));
 			testThread.start();
 		}
+		
+		CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
+		CouponDbHelper.dropTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
 
 	}
 
