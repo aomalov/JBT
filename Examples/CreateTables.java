@@ -19,20 +19,20 @@ public class CreateTables {
 		}
 		System.out.println("driver class loaded");
 
-		String url = "jdbc:derby://localhost:1527/db1";
+		String url = "jdbc:derby://localhost:1527/CouponDb;create=true";
 
 		try (Connection con = DriverManager.getConnection(url);) {
 
 			System.out.println("connection to db1 established");
 			//createBookTable(con);
-			
-			Book b=new Book(5, "title new", "author new 2", 123, new Date(new GregorianCalendar().getTimeInMillis()));
-			for(int k=1;k<100;k++)
-			{
-				b.setId(k+10);
-				b.setPrice(k+100);
-				BookDAO.createPrep(b, con);
-			}
+//			
+//			Book b=new Book(5, "title new", "author new 2", 123, new Date(new GregorianCalendar().getTimeInMillis()));
+//			for(int k=1;k<100;k++)
+//			{
+//				b.setId(k+10);
+//				b.setPrice(k+100);
+//				BookDAO.createPrep(b, con);
+//			}
 			//BookDAO.delete(b, con);
 			// deleteBookTable(con);
 
