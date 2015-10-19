@@ -2,6 +2,7 @@ package jsmith.jbt.com;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -109,6 +110,13 @@ public class ConnectionPool {
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	public static long getDBIdentityField(PreparedStatement stmt) throws SQLException{
+		stmt.executeUpdate();
+		ResultSet rs = stmt.getGeneratedKeys();
+		rs.next();
+		return rs.getInt(1);
 	}
 	
 

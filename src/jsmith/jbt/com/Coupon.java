@@ -24,7 +24,7 @@ public class Coupon {
 	private String MESSAGE;
 	private String IMAGE ;
 	private int AMOUNT ;
-	private BigDecimal PRICE ;
+	private Double PRICE ;
 	private Date START_DATE ;
 	private Date END_DATE ;
 	/**
@@ -38,7 +38,7 @@ public class Coupon {
 	 * @param sTART_DATE
 	 * @param eND_DATE
 	 */
-	public Coupon(long iD, CouponType tYPE, String tITLE, String mESSAGE, String iMAGE, int aMOUNT, BigDecimal pRICE,
+	public Coupon(long iD, CouponType tYPE, String tITLE, String mESSAGE, String iMAGE, int aMOUNT, Double pRICE,
 			Date sTART_DATE, Date eND_DATE) {
 		super();
 		ID = iD;
@@ -138,13 +138,13 @@ public class Coupon {
 	/**
 	 * @return the pRICE
 	 */
-	public BigDecimal getPRICE() {
+	public Double getPRICE() {
 		return PRICE;
 	}
 	/**
 	 * @param pRICE the pRICE to set
 	 */
-	public void setPRICE(BigDecimal pRICE) {
+	public void setPRICE(Double pRICE) {
 		PRICE = pRICE;
 	}
 	/**
