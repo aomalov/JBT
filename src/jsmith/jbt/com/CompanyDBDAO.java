@@ -5,6 +5,7 @@ package jsmith.jbt.com;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
@@ -33,11 +34,11 @@ public final class CompanyDBDAO implements CompanyDAO {
 		Connection con=cPool.getConnection();
 		long res;
 		try {
-			PreparedStatement pstmt = con.prepareStatement("insert into COMPANY values(?,?,?)",Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement pstmt = con.prepareStatement("insert into COMPANY(COMP_NAME,PASSWORD,EMAIL) values(?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, entity.getCOMP_NAME());
 			pstmt.setString(2, entity.getPASSWORD());
 			pstmt.setString(3, entity.getEMAIL());
-			res=ConnectionPool.getDBIdentityField(pstmt);
+			res=CouponDbHelper.getDBIdentityField(pstmt);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't insert into Company DB table");		
 		}
@@ -52,8 +53,25 @@ public final class CompanyDBDAO implements CompanyDAO {
 	 */
 	@Override
 	public Company read(long ID) throws CouponSystemException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con=cPool.getConnection();
+		Company res=new Company(ID,"","","");
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select COMP_NAME,PASSWORD,EMAIL from COMPANY where ID=?");
+			pstmt.setLong(1, ID);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				res.setCOMP_NAME(rs.getString("COMP_NAME"));
+				res.setPASSWORD(rs.getString("PASSWORD"));
+				res.setEMAIL(rs.getString("EMAIL"));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read a row from Company DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
 	}
 
 	/* (non-Javadoc)
@@ -75,6 +93,15 @@ public final class CompanyDBDAO implements CompanyDAO {
 		finally {
 			if(con!=null) cPool.returnConnection(con);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see jsmith.jbt.com.CompanyDAO#getCoupons(jsmith.jbt.com.Company)
+	 */
+	@Override
+	public Collection<Coupon> getCoupons(Company comp) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/* (non-Javadoc)

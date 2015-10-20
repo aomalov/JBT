@@ -36,7 +36,8 @@ public class CouponDBDAO implements CouponDAO {
 		Connection con=cPool.getConnection();
 		long res;
 		try {
-			PreparedStatement pstmt = con.prepareStatement("insert into COUPON values(?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement pstmt = con.prepareStatement("insert into COUPON(TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE) values(?,?,?,?,?,?,?,?)",
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, entity.getTITLE());
 			pstmt.setString(2, entity.getMESSAGE());
 			pstmt.setString(3, entity.getIMAGE());
@@ -45,7 +46,7 @@ public class CouponDBDAO implements CouponDAO {
 			pstmt.setDouble(6, entity.getPRICE());
 			pstmt.setDate(7, entity.getSTART_DATE());
 			pstmt.setDate(8, entity.getSTART_DATE());
-			res=ConnectionPool.getDBIdentityField(pstmt);
+			res=CouponDbHelper.getDBIdentityField(pstmt);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't insert into Coupon DB table");		
 		}

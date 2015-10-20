@@ -1,9 +1,17 @@
 package jsmith.jbt.com;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * @author andrew
+ * 
+ * Helper utility class for different DB related routines
+ *
+ */
 public class CouponDbHelper {
 	
 	private CouponDbHelper (){
@@ -43,6 +51,19 @@ public class CouponDbHelper {
 		}
 		
 		
+	}
+	
+	
+	/**
+	 * @param stmt
+	 * @return IDENTITY field after insertion
+	 * @throws SQLException
+	 */
+	public static long getDBIdentityField(PreparedStatement stmt) throws SQLException{
+		stmt.executeUpdate();
+		ResultSet rs = stmt.getGeneratedKeys();
+		rs.next();
+		return rs.getInt(1);
 	}
 
 }

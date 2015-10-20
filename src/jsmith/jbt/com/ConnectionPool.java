@@ -112,13 +112,6 @@ public class ConnectionPool {
 		}
 	}
 	
-	public static long getDBIdentityField(PreparedStatement stmt) throws SQLException{
-		stmt.executeUpdate();
-		ResultSet rs = stmt.getGeneratedKeys();
-		rs.next();
-		return rs.getInt(1);
-	}
-	
 
 	public static void main(String[] args) throws SQLException, CouponSystemException {
 		

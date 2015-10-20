@@ -26,17 +26,38 @@ public class TestConnPool extends Thread {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
-
-	public static void main(String[] args) throws CouponSystemException {
-		// TODO Auto-generated method stub
-		
+	
+	public static void TestMultyThreadingConnAquiring() {
 		for(int k=0;k<15;k++){
 			TestConnPool testThread=new TestConnPool("thread "+(k+1));
 			testThread.start();
 		}
+	}
+
+	public static void main(String[] args) throws CouponSystemException {
+		// TODO Auto-generated method stub
+	
+		//CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
+		//CouponDbHelper.dropTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
+		CustomerDBDAO custDAO=new CustomerDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
+		Customer cust=new Customer(0, "Test", "pASSWORD");
 		
-		CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
-		CouponDbHelper.dropTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
+		long idCust=custDAO.create(cust);
+		cust.setID(idCust);
+		
+		System.out.println("New customer ID="+idCust);
+		
+		cust.setCUST_NAME("New name");
+		custDAO.update(cust);
+		
+		Customer cust2=custDAO.read(idCust);
+		System.out.println(cust2);
+		
+		for (Customer c : custDAO.readAll()) {
+			System.out.println(c);
+		} 
+		
+		custDAO.delete(cust2);
 
 	}
 
