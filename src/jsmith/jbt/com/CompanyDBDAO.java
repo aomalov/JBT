@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -99,9 +100,26 @@ public final class CompanyDBDAO implements CompanyDAO {
 	 * @see jsmith.jbt.com.CompanyDAO#getCoupons(jsmith.jbt.com.Company)
 	 */
 	@Override
-	public Collection<Coupon> getCoupons(Company comp) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Coupon> getCoupons(Company comp) throws CouponSystemException {
+		Connection con=cPool.getConnection();
+		Collection<Coupon> res=new ArrayList<>();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE "
+					+ "from COUPON cp, COMPANY_COUPON cc where cc.COUPON_ID=cp.ID and cc.COMP_ID=?");
+			pstmt.setLong(1,comp.getID());
+			ResultSet rs=pstmt.executeQuery();
+			while(rs.next())
+			{
+				res.add(new Coupon(rs.getLong("ID"),Coupon.CouponType.valueOf(rs.getString("TYPE")),rs.getString("MESSAGE"),rs.getString("IMAGE"),rs.getString("TITLE"),
+						rs.getInt("AMOUNT"),rs.getDouble("PRICE"),rs.getDate("START_DATE"),rs.getDate("END_DATE")));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read rows from Company_Coupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
 	}
 
 	/* (non-Javadoc)
@@ -127,8 +145,22 @@ public final class CompanyDBDAO implements CompanyDAO {
 	 */
 	@Override
 	public Collection<Company> readAll() throws CouponSystemException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con=cPool.getConnection();
+		Collection<Company> res=new ArrayList<>() ;
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select ID,COMP_NAME,PASSWORD,EMAIL from COMPANY");
+			ResultSet rs=pstmt.executeQuery();
+			while(rs.next())
+			{
+				res.add(new Company(rs.getLong("ID"),rs.getString("COMP_NAME"),rs.getString("PASSWORD"),rs.getString("EMAIL")));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't rows from Company DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
 	}
 
 }

@@ -4,9 +4,12 @@
 package jsmith.jbt.com;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import jsmith.jbt.com.Coupon.CouponType;
@@ -61,8 +64,30 @@ public class CouponDBDAO implements CouponDAO {
 	 */
 	@Override
 	public Coupon read(long ID) throws CouponSystemException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con=cPool.getConnection();
+		Coupon res=new Coupon(ID,CouponType.RESTAURANT,"","","",0,Double.MIN_VALUE,Date.valueOf("01/01/2015"),Date.valueOf("01/01/2015"));
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where ID=?");
+			pstmt.setLong(1, ID);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				res.setTITLE(rs.getString("TITLE"));
+				res.setTYPE(CouponType.valueOf(rs.getString("TYPE")));
+				res.setIMAGE(rs.getString("IMAGE"));
+				res.setMESSAGE(rs.getString("MESSAGE"));
+				res.setAMOUNT(rs.getInt("AMOUNT"));
+				res.setPRICE(rs.getDouble("PRICE"));
+				res.setSTART_DATE(rs.getDate("START_DATE"));
+				res.setEND_DATE(rs.getDate("END_DATE"));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read a row from Coupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
 	}
 
 	/* (non-Javadoc)
@@ -115,8 +140,23 @@ public class CouponDBDAO implements CouponDAO {
 	 */
 	@Override
 	public Collection<Coupon> readAll() throws CouponSystemException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con=cPool.getConnection();
+		Collection<Coupon> res=new ArrayList<>();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON");
+			ResultSet rs=pstmt.executeQuery();
+			while(rs.next())
+			{
+				res.add(new Coupon(rs.getLong("ID"),CouponType.valueOf(rs.getString("TYPE")),rs.getString("TITLE"),rs.getString("IMAGE"),rs.getString("MESSAGE"),rs.getInt("AMOUNT"),
+						rs.getDouble("PRICE"),rs.getDate("START_DATE"),rs.getDate("END_DATE")));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read a row from Coupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
 	}
 
 	/* (non-Javadoc)
@@ -124,8 +164,24 @@ public class CouponDBDAO implements CouponDAO {
 	 */
 	@Override
 	public Collection<Coupon> realAllByType(CouponType TYPE) throws CouponSystemException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con=cPool.getConnection();
+		Collection<Coupon> res=new ArrayList<>();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where TYPE=?");
+			pstmt.setString(1, TYPE.name());
+			ResultSet rs=pstmt.executeQuery();
+			while(rs.next())
+			{
+				res.add(new Coupon(rs.getLong("ID"),CouponType.valueOf(rs.getString("TYPE")),rs.getString("TITLE"),rs.getString("IMAGE"),rs.getString("MESSAGE"),rs.getInt("AMOUNT"),
+						rs.getDouble("PRICE"),rs.getDate("START_DATE"),rs.getDate("END_DATE")));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read a row from Coupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
 	}
 
 }

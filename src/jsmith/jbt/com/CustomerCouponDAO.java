@@ -9,7 +9,7 @@ import java.util.Collection;
  * @author andrew
  *
  */
-public interface CustomerCoupon {
+public interface CustomerCouponDAO {
 	void create(long CUST_ID ,long COUPON_ID) throws CouponSystemException;
 	Collection<Long> readAll(long CUST_ID) throws CouponSystemException;
 	void delete(long CUST_ID, long COUPON_ID)  throws CouponSystemException;

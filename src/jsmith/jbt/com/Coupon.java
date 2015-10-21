@@ -3,7 +3,6 @@
  */
 package jsmith.jbt.com;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 /**
