@@ -1,6 +1,9 @@
 package jsmith.jbt.com;
 
 import java.sql.Connection;
+import java.sql.Date;
+
+import jsmith.jbt.com.Coupon.CouponType;
 
 public class TestConnPool extends Thread {
 	
@@ -39,26 +42,40 @@ public class TestConnPool extends Thread {
 	
 		//CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
 		//CouponDbHelper.dropTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
-		CustomerDBDAO custDAO=new CustomerDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
-		Customer cust=new Customer(0, "Test", "pASSWORD");
 		
+		CustomerDBDAO custDAO=new CustomerDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
+		Customer cust=new Customer(0, "Test", "pASSWORD");		
 		long idCust=custDAO.create(cust);
 		cust.setID(idCust);
-		
-		System.out.println("New customer ID="+idCust);
-		
-		cust.setCUST_NAME("New name");
-		custDAO.update(cust);
-		
-		Customer cust2=custDAO.read(idCust);
-		System.out.println(cust2);
-		
 		for (Customer c : custDAO.readAll()) {
 			System.out.println(c);
 		} 
 		
-		custDAO.delete(cust2);
-
+		CompanyDBDAO compDAO=new CompanyDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
+		Company comp=new Company(0, "Test", "pASSWORD","email");		
+		long idComp=compDAO.create(comp);
+		comp.setID(idComp);
+		comp.setCOMP_NAME("Real comp name");
+		compDAO.update(comp);
+		comp=compDAO.read(idComp);		
+		System.out.println("New company "+comp);
+		
+		CouponDBDAO couponDAO=new CouponDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
+		Coupon coupon=new Coupon(0, CouponType.TRAVEL,"Title", "Message","Image",0,0.0,Date.valueOf("2015-10-01"),Date.valueOf("2015-12-01"));		
+		long idCoupon=couponDAO.create(coupon);
+		coupon.setID(idCoupon);
+		System.out.println("New coupon "+coupon);
+		
+		CompanyCouponDBDAO compCoupon = new CompanyCouponDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
+		CustomerCouponDBDAO custCoupon = new CustomerCouponDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));
+		
+		compCoupon.create(idComp, idCoupon);
+		custCoupon.create(idCust, idCoupon);
+		
+		for(long id: compCoupon.readAll(idComp)) System.out.println("coupon "+couponDAO.read(id)+" registered for company "+compDAO.read(idComp));
+		
+		for(long id: custCoupon.readAll(idCust)) System.out.println("coupon "+couponDAO.read(id)+" registered for customer "+custDAO.read(idCust));
+		
 	}
 
 }

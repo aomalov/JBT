@@ -65,7 +65,7 @@ public class CouponDBDAO implements CouponDAO {
 	@Override
 	public Coupon read(long ID) throws CouponSystemException {
 		Connection con=cPool.getConnection();
-		Coupon res=new Coupon(ID,CouponType.RESTAURANT,"","","",0,Double.MIN_VALUE,Date.valueOf("01/01/2015"),Date.valueOf("01/01/2015"));
+		Coupon res=new Coupon(ID,CouponType.RESTAURANT,"","","",0,Double.MIN_VALUE,Date.valueOf("2015-01-01"),Date.valueOf("2015-01-01"));
 		try {
 			PreparedStatement pstmt = con.prepareStatement("select TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where ID=?");
 			pstmt.setLong(1, ID);

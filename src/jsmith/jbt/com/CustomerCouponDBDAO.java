@@ -36,7 +36,7 @@ public class CustomerCouponDBDAO implements CustomerCouponDAO {
 			PreparedStatement pstmt = con.prepareStatement("insert into CUSTOMER_COUPON(CUST_ID,COUPON_ID) values(?,?)");
 			pstmt.setLong(1, CUST_ID);
 			pstmt.setLong(2, COUPON_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't insert a row into  CustomerCoupon DB table");		
 		}
@@ -79,7 +79,7 @@ public class CustomerCouponDBDAO implements CustomerCouponDAO {
 			PreparedStatement pstmt = con.prepareStatement("delete from CUSTOMER_COUPON where CUST_ID=? and COUPON_ID=?");
 			pstmt.setLong(1, CUST_ID);
 			pstmt.setLong(2, COUPON_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't delete a row from CustomerCoupon DB table");		
 		}
@@ -98,7 +98,7 @@ public class CustomerCouponDBDAO implements CustomerCouponDAO {
 		try {
 			PreparedStatement pstmt = con.prepareStatement("delete from CUSTOMER_COUPON where CUST_ID=?");
 			pstmt.setLong(1, CUST_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't delete all rows from CustomerCoupon DB table");		
 		}
@@ -118,7 +118,7 @@ public class CustomerCouponDBDAO implements CustomerCouponDAO {
 		try {
 			PreparedStatement pstmt = con.prepareStatement("delete from CUSTOMER_COUPON where COUPON_ID=?");
 			pstmt.setLong(1, COUPON_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't delete a row from CustomerCoupon DB table");		
 		}

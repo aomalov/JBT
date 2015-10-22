@@ -38,9 +38,9 @@ public class CompanyCouponDBDAO implements CompanyCouponDAO {
 			PreparedStatement pstmt = con.prepareStatement("insert into COMPANY_COUPON(COMP_ID,COUPON_ID) values(?,?)");
 			pstmt.setLong(1, COMP_ID);
 			pstmt.setLong(2, COUPON_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new CouponSystemException("Couldn't insert a row into  CompanyCoupon DB table");		
+			throw new CouponSystemException("Couldn't insert a row into  CompanyCoupon DB table - "+e.getMessage());		
 		}
 		finally {
 			if(con!=null) cPool.returnConnection(con);
@@ -81,7 +81,7 @@ public class CompanyCouponDBDAO implements CompanyCouponDAO {
 			PreparedStatement pstmt = con.prepareStatement("delete from COMPANY_COUPON where COMP_ID=? and COUPON_ID=?");
 			pstmt.setLong(1, COMP_ID);
 			pstmt.setLong(2, COUPON_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't delete a row from CompanyCoupon DB table");		
 		}
@@ -100,7 +100,7 @@ public class CompanyCouponDBDAO implements CompanyCouponDAO {
 		try {
 			PreparedStatement pstmt = con.prepareStatement("delete from COMPANY_COUPON where COMP_ID=?");
 			pstmt.setLong(1, COMP_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't delete all rows from CompanyCoupon DB table");		
 		}
@@ -120,7 +120,7 @@ public class CompanyCouponDBDAO implements CompanyCouponDAO {
 		try {
 			PreparedStatement pstmt = con.prepareStatement("delete from COMPANY_COUPON where COUPON_ID=?");
 			pstmt.setLong(1, COUPON_ID);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't delete a row from CompanyCoupon DB table");		
 		}
