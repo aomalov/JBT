@@ -1,7 +1,7 @@
 /**
  * 
  */
-package jsmith.jbt.com;
+package jsmith.jbt.com.DAO;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -12,7 +12,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import jsmith.jbt.com.Coupon.CouponType;
+import jsmith.jbt.com.ConnectionPool;
+import jsmith.jbt.com.CouponDbHelper;
+import jsmith.jbt.com.CouponSystemException;
+import jsmith.jbt.com.DTO.Coupon;
+import jsmith.jbt.com.DTO.Coupon.CouponType;
 
 /**
  * @author andrew

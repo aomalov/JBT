@@ -1,7 +1,7 @@
 /**
  * 
  */
-package jsmith.jbt.com;
+package jsmith.jbt.com.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import jsmith.jbt.com.ConnectionPool;
+import jsmith.jbt.com.CouponDbHelper;
+import jsmith.jbt.com.CouponSystemException;
+import jsmith.jbt.com.DTO.Coupon;
+import jsmith.jbt.com.DTO.Customer;
 
 /**
  * @author andrew

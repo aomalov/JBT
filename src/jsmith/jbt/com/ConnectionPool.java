@@ -86,7 +86,7 @@ public class ConnectionPool {
 		notifyAll();
 	}
 	
-	public static void closeAllConnections() throws CouponSystemException{
+	public void closeAllConnections() throws CouponSystemException{
 		for (Connection conn : instance.connections) {
 			try {
 				conn.close();
@@ -115,8 +115,9 @@ public class ConnectionPool {
 
 	public static void main(String[] args) throws SQLException, CouponSystemException {
 		
+		ConnectionPool testPool = null;
 		try {
-			ConnectionPool testPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+			testPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 			Connection conn=testPool.getConnection();
 			System.out.println("size of the queue "+testPool.freeConnections.size());
 			showQuery(conn, "select * from Tmp");
@@ -126,7 +127,7 @@ public class ConnectionPool {
 			e.printStackTrace();
 		}
 		finally {
-			closeAllConnections();
+			if(testPool!=null) testPool.closeAllConnections();
 		}
 	}
 }

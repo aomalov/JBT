@@ -1,7 +1,7 @@
 /**
  * 
  */
-package jsmith.jbt.com;
+package jsmith.jbt.com.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import jsmith.jbt.com.ConnectionPool;
+import jsmith.jbt.com.CouponSystemException;
 
 /**
  * @author andrew

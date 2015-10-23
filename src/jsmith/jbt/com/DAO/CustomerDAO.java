@@ -1,9 +1,13 @@
 /**
  * 
  */
-package jsmith.jbt.com;
+package jsmith.jbt.com.DAO;
 
 import java.util.Collection;
+
+import jsmith.jbt.com.CouponSystemException;
+import jsmith.jbt.com.DTO.Coupon;
+import jsmith.jbt.com.DTO.Customer;
 
 /**
  * @author andrew

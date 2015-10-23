@@ -1,7 +1,7 @@
 /**
  * 
  */
-package jsmith.jbt.com;
+package jsmith.jbt.com.DTO;
 
 /**
  * @author andrew

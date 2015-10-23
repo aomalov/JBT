@@ -3,7 +3,15 @@ package jsmith.jbt.com;
 import java.sql.Connection;
 import java.sql.Date;
 
-import jsmith.jbt.com.Coupon.CouponType;
+import jsmith.jbt.com.DAO.CompanyCouponDBDAO;
+import jsmith.jbt.com.DAO.CompanyDBDAO;
+import jsmith.jbt.com.DAO.CouponDBDAO;
+import jsmith.jbt.com.DAO.CustomerCouponDBDAO;
+import jsmith.jbt.com.DAO.CustomerDBDAO;
+import jsmith.jbt.com.DTO.Company;
+import jsmith.jbt.com.DTO.Coupon;
+import jsmith.jbt.com.DTO.Customer;
+import jsmith.jbt.com.DTO.Coupon.CouponType;
 
 public class TestConnPool extends Thread {
 	

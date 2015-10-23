@@ -65,5 +65,27 @@ public class CouponDbHelper {
 		rs.next();
 		return rs.getInt(1);
 	}
+	
+	/**
+	 * @param stmt
+	 * @return Cnt field from the prepared query
+	 * @throws SQLException
+	 * @throws CouponSystemException 
+	 */
+	public static long getCountQueryResult(String sqlQuery,ConnectionPool cPool) throws CouponSystemException {
+		long res=0;
+		
+		PreparedStatement pstmt;
+		try {
+			pstmt = cPool.getConnection().prepareStatement(sqlQuery);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next()) res=rs.getLong("cnt");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new CouponSystemException("Error in DB query "+sqlQuery);
+		}
+	
+		return res;
+	}
 
 }
