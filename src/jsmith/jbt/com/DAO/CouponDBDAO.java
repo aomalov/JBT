@@ -52,7 +52,7 @@ public class CouponDBDAO implements CouponDAO {
 			pstmt.setInt(5, entity.getAMOUNT());
 			pstmt.setDouble(6, entity.getPRICE());
 			pstmt.setDate(7, entity.getSTART_DATE());
-			pstmt.setDate(8, entity.getSTART_DATE());
+			pstmt.setDate(8, entity.getEND_DATE());
 			res=CouponDbHelper.getDBIdentityField(pstmt);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't insert into Coupon DB table");		
@@ -173,6 +173,28 @@ public class CouponDBDAO implements CouponDAO {
 		try {
 			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where TYPE=?");
 			pstmt.setString(1, TYPE.name());
+			ResultSet rs=pstmt.executeQuery();
+			while(rs.next())
+			{
+				res.add(new Coupon(rs.getLong("ID"),CouponType.valueOf(rs.getString("TYPE")),rs.getString("TITLE"),rs.getString("IMAGE"),rs.getString("MESSAGE"),rs.getInt("AMOUNT"),
+						rs.getDouble("PRICE"),rs.getDate("START_DATE"),rs.getDate("END_DATE")));
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read a row from Coupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
+	}
+
+	@Override
+	public Collection<Coupon> realAllByEndDate(Date couponDate) throws CouponSystemException {
+		Connection con=cPool.getConnection();
+		Collection<Coupon> res=new ArrayList<>();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where END_DATE<?");
+			pstmt.setDate(1, couponDate);
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next())
 			{

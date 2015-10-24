@@ -50,7 +50,7 @@ public class CustomerFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//name lookup
-		long ID=CouponDbHelper.getQueryResultLong("select ID from CUSTOMER where CUST_NAME'"+name+"'", "ID", cPool);
+		long ID=CouponDbHelper.getQueryResultLong("select ID from CUSTOMER where CUST_NAME='"+name+"'", "ID", cPool);
 		if(ID>0) innerCustomer=custDBDAO.read(ID);
 		else throw new CouponSystemException("User name not valid");
 		if(password.equals(innerCustomer.getPASSWORD())) return this;
@@ -62,7 +62,13 @@ public class CustomerFacade implements CouponClientFacade {
 		long cnt=CouponDbHelper.getQueryResultLong("select count(COUPON_ID) as cnt from CUSTOMER_COUPON where CUST_ID="+innerCustomer.getID()+" and COUPON_ID="+aCoupon.getID(), "cnt", cPool);
 		if(cnt>0) throw new CouponSystemException("cannot purchase coupon twice");
 		
-		custcouponDBDAO.create(innerCustomer.getID(), aCoupon.getID());
+		Coupon safeCopy=couponDBDAO.read(aCoupon.getID());
+		if(safeCopy.getAMOUNT()>0) {
+			custcouponDBDAO.create(innerCustomer.getID(), aCoupon.getID());
+			//Update the number of coupons available at the company resourse stock
+			safeCopy.setAMOUNT(aCoupon.getAMOUNT()-1);
+			couponDBDAO.update(safeCopy);			
+		}
 	}
 	
 	public Collection<Coupon> getAllPurchased() throws CouponSystemException {

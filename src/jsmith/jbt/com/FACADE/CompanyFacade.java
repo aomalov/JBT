@@ -50,7 +50,7 @@ public class CompanyFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//name lookup
-		long ID=CouponDbHelper.getQueryResultLong("select ID from COMPANY where COMP_NAME'"+name+"'", "ID", cPool);
+		long ID=CouponDbHelper.getQueryResultLong("select ID from COMPANY where COMP_NAME='"+name+"'", "ID", cPool);
 		if(ID>0) innerCompany=compDBDAO.read(ID);
 		else throw new CouponSystemException("Company User name not valid");
 		if(password.equals(innerCompany.getPASSWORD())) return this;
@@ -60,8 +60,9 @@ public class CompanyFacade implements CouponClientFacade {
 	public void createCoupon(Coupon aCoupon) throws CouponSystemException {
 		//no such name
 		if(CouponDbHelper.getQueryResultLong("select count(*) as cnt from COUPON where TITLE='"+aCoupon.getTITLE()+"'","cnt",cPool)==0) {
-			long id=couponDBDAO.create(aCoupon);
+			long id=couponDBDAO.create(aCoupon); //Create entity table record
 			aCoupon.setID(id);
+			compcouponDBDAO.create(innerCompany.getID(), id); //Link a coupon to the company
 		}
 		else throw new CouponSystemException("There is a coupon with title "+aCoupon.getTITLE());
 	}
