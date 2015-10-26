@@ -9,10 +9,12 @@ package jsmith.jbt.com.DTO;
  * Company DTO
  */
 public class Company {
+	
 	private long ID ;
 	private String COMP_NAME;
 	private String PASSWORD ;
 	private String EMAIL;
+
 	/**
 	 * @return the cOMP_NAME
 	 */
@@ -63,6 +65,44 @@ public class Company {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Company [ID=").append(ID).append(", COMP_NAME=").append(COMP_NAME).append("]");
 		return builder.toString();
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((COMP_NAME == null) ? 0 : COMP_NAME.hashCode());
+		result = prime * result + (int) (ID ^ (ID >>> 32));
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Company)) {
+			return false;
+		}
+		Company other = (Company) obj;
+		if (COMP_NAME == null) {
+			if (other.COMP_NAME != null) {
+				return false;
+			}
+		} else if (!COMP_NAME.equals(other.COMP_NAME)) {
+			return false;
+		}
+		if (ID != other.ID) {
+			return false;
+		}
+		return true;
 	}
 	/**
 	 * @param iD

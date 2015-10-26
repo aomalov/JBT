@@ -13,7 +13,6 @@ import java.util.Collection;
 import jsmith.jbt.com.CompanyCouponDAO;
 import jsmith.jbt.com.ConnectionPool;
 import jsmith.jbt.com.CouponSystemException;
-import jsmith.jbt.com.DTO.Coupon.CouponType;
 
 /**
  * @author andrew

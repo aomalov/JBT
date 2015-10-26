@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ArrayBlockingQueue;
-
 import jsmith.jbt.com.ConnectionPool;
 import jsmith.jbt.com.CouponDbHelper;
 import jsmith.jbt.com.CouponSystemException;

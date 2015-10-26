@@ -62,6 +62,44 @@ public class Coupon {
 				.append(", END_DATE=").append(END_DATE).append("]");
 		return builder.toString();
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (ID ^ (ID >>> 32));
+		result = prime * result + ((TITLE == null) ? 0 : TITLE.hashCode());
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Coupon)) {
+			return false;
+		}
+		Coupon other = (Coupon) obj;
+		if (ID != other.ID) {
+			return false;
+		}
+		if (TITLE == null) {
+			if (other.TITLE != null) {
+				return false;
+			}
+		} else if (!TITLE.equals(other.TITLE)) {
+			return false;
+		}
+		return true;
+	}
 	/**
 	 * @return the tYPE
 	 */

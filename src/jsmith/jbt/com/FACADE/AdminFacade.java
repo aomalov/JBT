@@ -10,7 +10,6 @@ import jsmith.jbt.com.CouponDbHelper;
 import jsmith.jbt.com.CouponSystemException;
 import jsmith.jbt.com.DAO.CompanyCouponDBDAO;
 import jsmith.jbt.com.DAO.CompanyDBDAO;
-import jsmith.jbt.com.DAO.CouponDBDAO;
 import jsmith.jbt.com.DAO.CustomerCouponDBDAO;
 import jsmith.jbt.com.DAO.CustomerDBDAO;
 import jsmith.jbt.com.DTO.Company;

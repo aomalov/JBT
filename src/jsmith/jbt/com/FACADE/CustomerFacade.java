@@ -11,8 +11,6 @@ import java.util.Collection;
 import jsmith.jbt.com.ConnectionPool;
 import jsmith.jbt.com.CouponDbHelper;
 import jsmith.jbt.com.CouponSystem.ClientType;
-import jsmith.jbt.com.DAO.CompanyCouponDBDAO;
-import jsmith.jbt.com.DAO.CompanyDBDAO;
 import jsmith.jbt.com.DAO.CouponDBDAO;
 import jsmith.jbt.com.DAO.CustomerCouponDBDAO;
 import jsmith.jbt.com.DAO.CustomerDBDAO;
@@ -26,10 +24,8 @@ import jsmith.jbt.com.DTO.Customer;
  */
 public class CustomerFacade implements CouponClientFacade {
 
-	private final CompanyDBDAO compDBDAO;
 	private final CustomerDBDAO custDBDAO;
 	private final CustomerCouponDBDAO custcouponDBDAO;
-	private final CompanyCouponDBDAO compcouponDBDAO;
 	private final CouponDBDAO couponDBDAO;
 	private final ConnectionPool cPool;
 	private Customer innerCustomer=null;
@@ -37,10 +33,8 @@ public class CustomerFacade implements CouponClientFacade {
 	
 	public CustomerFacade() throws CouponSystemException{
 		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
-		this.compDBDAO=new CompanyDBDAO(cPool);
 		this.custDBDAO=new CustomerDBDAO(cPool);
 		this.custcouponDBDAO=new CustomerCouponDBDAO(cPool);
-		this.compcouponDBDAO=new CompanyCouponDBDAO(cPool);
 		this.couponDBDAO=new CouponDBDAO(cPool);
 	}
 	
@@ -52,7 +46,7 @@ public class CustomerFacade implements CouponClientFacade {
 		//name lookup
 		long ID=CouponDbHelper.getQueryResultLong("select ID from CUSTOMER where CUST_NAME='"+name+"'", "ID", cPool);
 		if(ID>0) innerCustomer=custDBDAO.read(ID);
-		else throw new CouponSystemException("User name not valid");
+		else throw new CouponSystemException("Customer name at login is not valid");
 		if(password.equals(innerCustomer.getPASSWORD())) return this;
 		else throw new CouponSystemException("password not valid");
 	}

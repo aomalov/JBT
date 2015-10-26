@@ -48,7 +48,7 @@ public class TestConnPool extends Thread {
 	public static void main(String[] args) throws CouponSystemException {
 		// TODO Auto-generated method stub
 	
-		//CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
+		CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
 		//CouponDbHelper.dropTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
 		
 		CustomerDBDAO custDAO=new CustomerDBDAO(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl));

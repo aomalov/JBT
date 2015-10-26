@@ -4,14 +4,11 @@
 package jsmith.jbt.com;
 
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import jsmith.jbt.com.DAO.CompanyCouponDBDAO;
-import jsmith.jbt.com.DAO.CompanyDBDAO;
 import jsmith.jbt.com.DAO.CouponDBDAO;
 import jsmith.jbt.com.DAO.CustomerCouponDBDAO;
-import jsmith.jbt.com.DAO.CustomerDBDAO;
 import jsmith.jbt.com.DTO.Coupon;
 
 /**
@@ -35,12 +32,13 @@ public class DailyCouponExpirationTask implements Runnable {
 		while(!quit){
 			try {
 				Date today=new Date(GregorianCalendar.getInstance().getTimeInMillis());
+				//TODO check the Time - is it time to run the scheduled cleaning
 				for(Coupon outdatedCoupon: couponDBDAO.realAllByEndDate(today)) {
 					custcouponDBDAO.deleteAllCoupons(outdatedCoupon.getID()); //Delete from all customers
 					compcouponDBDAO.deleteAllCoupons(outdatedCoupon.getID()); //Delete from company
 					couponDBDAO.delete(outdatedCoupon);						  //Delete the entity record
 				}
-				Thread.sleep(3000); //sleep one hour
+				Thread.sleep(5000); //TODO remove the sleep
 			} catch (InterruptedException | CouponSystemException e) {
 				System.out.println("DailyExpirationRoutine interrupted by force, quit flag="+this.quit);
 			}
