@@ -16,6 +16,8 @@ import java.util.Set;
  * @author andrew
  * ConnectionPool class - introduces a singleton routine DB helper class
  * 
+ * the pool returns a connection quickly - based on the queue data structure
+ * 
  */
 
 public class ConnectionPool {
@@ -56,7 +58,7 @@ public class ConnectionPool {
 			try {
 				newConn = DriverManager.getConnection(dbUrl);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				// 
 				throw new CouponSystemException("Could not obtain db connection in Conn Pool."); 
 			}
 			connections.add(newConn);
@@ -72,7 +74,7 @@ public class ConnectionPool {
 				wait();
 				//System.out.println("no empty conns");
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// 
 				throw new CouponSystemException("Couldn't provide free connection from the pool");
 			}
 		//System.out.println("gave 1 conn from " + freeConnections.size());
@@ -90,7 +92,7 @@ public class ConnectionPool {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				// 
 				throw new CouponSystemException("Couldn't close connection in Connection Pool");
 			}
 		}

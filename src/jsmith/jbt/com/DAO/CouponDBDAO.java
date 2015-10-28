@@ -110,7 +110,7 @@ public class CouponDBDAO implements CouponDAO {
 			pstmt.setInt(5, entity.getAMOUNT());
 			pstmt.setDouble(6, entity.getPRICE());
 			pstmt.setDate(7, entity.getSTART_DATE());
-			pstmt.setDate(8, entity.getSTART_DATE());
+			pstmt.setDate(8, entity.getEND_DATE());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't update Coupon DB table");		

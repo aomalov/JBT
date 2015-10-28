@@ -3,6 +3,8 @@
  */
 package jsmith.jbt.com;
 
+import java.util.concurrent.TimeUnit;
+
 import jsmith.jbt.com.FACADE.AdminFacade;
 import jsmith.jbt.com.FACADE.CompanyFacade;
 import jsmith.jbt.com.FACADE.CouponClientFacade;
@@ -34,7 +36,7 @@ public class CouponSystem {
 	}
 	
 	private CouponSystem() throws CouponSystemException{
-		this.cleanUpTask=new DailyCouponExpirationTask();
+		this.cleanUpTask=new DailyCouponExpirationTask(TimeUnit.MINUTES,5); //Every 5 minutes clean outdated coupons
 		this.cleanupTaskThread=new Thread(this.cleanUpTask);
 		this.cleanupTaskThread.start();
 	}

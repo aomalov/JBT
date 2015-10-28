@@ -13,6 +13,11 @@ import jsmith.jbt.com.DTO.Coupon;
 import jsmith.jbt.com.DTO.Customer;
 import jsmith.jbt.com.DTO.Coupon.CouponType;
 
+/**
+ * @author andrewm
+ *
+ *Test class for table creation and thread pool running
+ */
 public class TestConnPool extends Thread {
 	
 	@Override
@@ -25,7 +30,7 @@ public class TestConnPool extends Thread {
 			cPool.returnConnection(conn);
 			System.out.println(getName()+" released connection");
 		} catch (CouponSystemException e) {
-			// TODO Auto-generated catch block
+			// 
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -35,9 +40,12 @@ public class TestConnPool extends Thread {
 
 	public TestConnPool(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		// 
 	}
 	
+	/**
+	 * Test procedure for blocking Connection get and return for the Thread Pool
+	 */
 	public static void TestMultyThreadingConnAquiring() {
 		for(int k=0;k<15;k++){
 			TestConnPool testThread=new TestConnPool("thread "+(k+1));
@@ -46,7 +54,7 @@ public class TestConnPool extends Thread {
 	}
 
 	public static void main(String[] args) throws CouponSystemException {
-		// TODO Auto-generated method stub
+		// 
 	
 		CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
 		//CouponDbHelper.dropTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());

@@ -17,6 +17,10 @@ import jsmith.jbt.com.FACADE.CustomerFacade;
 /**
  * @author andrew
  *
+ *Global testing routine for PHASE 1 of the project Coupons
+ *
+ *ALL facades are tested
+ *
  */
 public class TestCouponSystem {
 
@@ -24,34 +28,45 @@ public class TestCouponSystem {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		
 		try {
+			ConnectionPool cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+			//if you want come clean-up
+			//CouponDbHelper.dropTables(cPool.getConnection());
+			//CouponDbHelper.createTables(cPool.getConnection());
+			
+			long identity_cnt=CouponDbHelper.getQueryResultLong("select count(*)+1 as cnt from COMPANY", "cnt", cPool);
 			CouponSystem theCouponius=CouponSystem.getInstance();
 			AdminFacade admin=(AdminFacade)theCouponius.login("Admin", "1234", ClientType.Admin);
-			Company testComp=new Company(0, "Company 40", "1234", "comp1@comp1.com");
+			Company testComp=new Company(0, "Company "+identity_cnt, "1234", "comp"+identity_cnt+"@companies.com");
 			admin.createCompany(testComp);
-			System.out.println(testComp.getID());
+			System.out.println("Created company # "+testComp.getID());
 			
-			Customer testCust=new Customer(0, "Customer 10", "1234");
+			Customer testCust=new Customer(0, "Customer "+identity_cnt, "1234");
 			admin.createCustomer(testCust);
-			System.out.println(testCust.getID());
+			System.out.println("Created customer #"+testCust.getID());
 			
-			CompanyFacade compFacade=(CompanyFacade)theCouponius.login("Company 40", "1234", ClientType.Company);
-			Coupon testCoupon=new Coupon(0, CouponType.HEALTHCARE, "Coupon 3", "msg", "iMAGE", 2, 15.0, Date.valueOf("2015-1-1"), Date.valueOf("2015-12-1"));
+			CompanyFacade compFacade=(CompanyFacade)theCouponius.login("Company "+identity_cnt, "1234", ClientType.Company);
+			Coupon testCoupon=new Coupon(0, CouponType.HEALTHCARE, "Coupon "+identity_cnt, "msg", "iMAGE", 2, 15.0, Date.valueOf("2015-1-1"), Date.valueOf("2015-12-1"));
 			
 			//TODO:  coupon record is deleted by derby
 			compFacade.createCoupon(testCoupon);
 			//testCoupon=compFacade.getCoupon(7);
-			System.out.println(testCoupon.getID());
+			System.out.println("Created coupon #"+testCoupon.getID());
+			System.out.println("All coupons for company "+testComp.getCOMP_NAME());
 			for(Coupon c:compFacade.getCouponByType(CouponType.HEALTHCARE)) System.out.println(c);
-			
-			CustomerFacade custFacade=(CustomerFacade)theCouponius.login("Customer 10", "1234", ClientType.Client);
+
+			CustomerFacade custFacade=(CustomerFacade)theCouponius.login("Customer "+identity_cnt, "1234", ClientType.Client);
 			custFacade.purchaseCoupon(testCoupon);
+			System.out.println("All coupons for customer "+testCust.getCUST_NAME());			
 			for(Coupon c:custFacade.getAllPurchased()) System.out.println(c);
 			
+			Thread.sleep(15000);
 			theCouponius.shutdown();
 			
-		} catch (CouponSystemException e) {
-			// TODO Auto-generated catch block
+		} catch (CouponSystemException | InterruptedException e) {
+			// 
 			e.printStackTrace();
 		}
 		

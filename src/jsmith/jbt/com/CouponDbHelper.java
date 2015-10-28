@@ -1,10 +1,18 @@
 package jsmith.jbt.com;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author andrew
@@ -16,6 +24,28 @@ public class CouponDbHelper {
 	
 	private CouponDbHelper (){
 		
+	}
+	
+	/**
+	 * @param date1
+	 * @param date2
+	 * @return Map of TimeUnits  - difference between 2 dates in seconds, hours, etc
+	 * 
+	 * @author http://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances
+	 */
+	public static Map<TimeUnit,Long> computeDetailedDateDiff(Date date1, Date date2) {
+	    long diffInMillies = date2.getTime() - date1.getTime();
+	    List<TimeUnit> units = new ArrayList<TimeUnit>(EnumSet.allOf(TimeUnit.class));
+	    Collections.reverse(units);
+	    Map<TimeUnit,Long> result = new LinkedHashMap<TimeUnit,Long>();
+	    long milliesRest = diffInMillies;
+	    for ( TimeUnit unit : units ) {
+	        long diff = unit.convert(milliesRest,TimeUnit.MILLISECONDS);
+	        long diffInMilliesForUnit = unit.toMillis(diff);
+	        milliesRest = milliesRest - diffInMilliesForUnit;
+	        result.put(unit,diff);
+	    }
+	    return result;
 	}
 	
 	public static void createTables(Connection conn) throws CouponSystemException {;
@@ -46,7 +76,7 @@ public class CouponDbHelper {
 			stmt.executeUpdate("DROP TABLE Coupon");
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// 
 			throw new CouponSystemException("Couldn't drop db table");
 		}
 		
@@ -81,7 +111,7 @@ public class CouponDbHelper {
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next()) res=rs.getLong(fieldName);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// 
 			throw new CouponSystemException("Error in DB query "+sqlQuery);
 		}
 	
