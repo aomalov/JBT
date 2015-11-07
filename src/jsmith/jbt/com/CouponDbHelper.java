@@ -48,6 +48,12 @@ public class CouponDbHelper {
 	    return result;
 	}
 	
+	/**
+	 * Creates all DB Coupon Tables
+	 * 
+	 * @param conn
+	 * @throws CouponSystemException
+	 */
 	public static void createTables(Connection conn) throws CouponSystemException {;
 		
 		try {
@@ -65,6 +71,12 @@ public class CouponDbHelper {
 		}
 	}
 	
+	/**
+	 * Removes all DB Coupon Tables
+	 * 
+	 * @param conn
+	 * @throws CouponSystemException
+	 */
 	public static void dropTables(Connection conn) throws CouponSystemException{
 		Statement stmt;
 		try {
@@ -117,5 +129,29 @@ public class CouponDbHelper {
 	
 		return res;
 	}
+	
+	/**
+	 * @param sql
+	 * @param fieldName
+	 * @param cPool
+	 * @return ID for login lookup before a FACADE instance is returned
+	 * @throws CouponSystemException
+	 */
+	public static long getLoginLookup(String sql,String fieldName,String searchVal, ConnectionPool cPool) throws CouponSystemException {
+		long res=0;
+		
+		try {
+			PreparedStatement pstmt=cPool.getConnection().prepareStatement(sql);
+			pstmt.setString(1, searchVal);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next()) res=rs.getLong(fieldName);
+		} catch (SQLException e) {
+			// 
+			throw new CouponSystemException("Error in DB query for field"+fieldName);
+		}
+	
+		return res;
+	}
+
 
 }

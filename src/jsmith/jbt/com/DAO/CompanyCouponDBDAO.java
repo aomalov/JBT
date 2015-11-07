@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import jsmith.jbt.com.CompanyCouponDAO;
 import jsmith.jbt.com.ConnectionPool;
 import jsmith.jbt.com.CouponSystemException;
 

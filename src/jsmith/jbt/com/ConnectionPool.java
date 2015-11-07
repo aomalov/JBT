@@ -98,6 +98,13 @@ public class ConnectionPool {
 		}
 	}
 	
+	/**
+	 * Utility function - used only for local testing
+	 * 
+	 * @param conn
+	 * @param sql
+	 * @throws SQLException
+	 */
 	public static void showQuery(Connection conn,String sql) throws SQLException
 	{
 		Statement stmt=conn.createStatement();
@@ -113,22 +120,4 @@ public class ConnectionPool {
 		}
 	}
 	
-
-	public static void main(String[] args) throws SQLException, CouponSystemException {
-		
-		ConnectionPool testPool = null;
-		try {
-			testPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
-			Connection conn=testPool.getConnection();
-			System.out.println("size of the queue "+testPool.freeConnections.size());
-			showQuery(conn, "select * from Tmp");
-			
-		} catch (CouponSystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			if(testPool!=null) testPool.closeAllConnections();
-		}
-	}
 }

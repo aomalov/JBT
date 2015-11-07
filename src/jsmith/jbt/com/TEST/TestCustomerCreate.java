@@ -1,7 +1,4 @@
-/**
- * 
- */
-package jsmith.jbt.com.tests;
+package jsmith.jbt.com.TEST;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
@@ -16,8 +13,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 import jsmith.jbt.com.ConnectionPool;
 import jsmith.jbt.com.CouponSystemException;
-import jsmith.jbt.com.DAO.CompanyDBDAO;
-import jsmith.jbt.com.DTO.Company;
+import jsmith.jbt.com.DAO.CustomerDBDAO;
+import jsmith.jbt.com.DTO.Customer;
 import jsmith.jbt.com.FACADE.AdminFacade;
 
 /**
@@ -25,30 +22,30 @@ import jsmith.jbt.com.FACADE.AdminFacade;
  *
  */
 @RunWith(Parameterized.class)
-public class TestCompanyCreate {
-	
-	private String companyName;
-	private CompanyDBDAO compDbDao;
+public class TestCustomerCreate {
+
+	private String customerName;
+	private CustomerDBDAO custDbDao;
 	private AdminFacade adminFacade;
 	private ConnectionPool cPool;
-	private Company aComp;
+	private Customer aCust;
 	
     @Parameters
     public static Collection<Object[]> data() {
         // @formatter:off
         Object[][] data = new Object[][] { 
-            { "Company 59" },
-            { "Company 60" }
+            { "Customer 59" },
+            { "Customer 60" }
         };
         // @formatter:on
         return asList(data);
     }
 
-	public TestCompanyCreate(String companyName) throws CouponSystemException {
-		this.companyName = companyName;
+	public TestCustomerCreate(String customerName) throws CouponSystemException {
+		this.customerName = customerName;
 		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 
-		this.compDbDao=new CompanyDBDAO(this.cPool);
+		this.custDbDao=new CustomerDBDAO(this.cPool);
 		this.adminFacade=new AdminFacade();
 	}
 
@@ -57,7 +54,7 @@ public class TestCompanyCreate {
 	 */
 	@Before
 	public void setUp() throws Exception { //is run before each test on each iteration
-		aComp=new Company(0,companyName,"","");
+		aCust=new Customer(0,customerName,"");
 	}
 
 	/**
@@ -66,10 +63,10 @@ public class TestCompanyCreate {
 	 */
 	@Test
 	public void testCreate() throws CouponSystemException {
-		long id=compDbDao.create(aComp);
-		aComp.setID(id);
-		Company newComp=compDbDao.read(id);
-		assertEquals(aComp, newComp);
+		long id=custDbDao.create(aCust);
+		aCust.setID(id);
+		Customer newCust=custDbDao.read(id);
+		assertEquals(aCust, newCust);
 	}
 
 	/**
@@ -78,7 +75,8 @@ public class TestCompanyCreate {
 	 */
 	@Test(expected=CouponSystemException.class)
 	public void testDuplicatedName() throws CouponSystemException {
-		adminFacade.createCompany(aComp);
+		adminFacade.createCustomer(aCust);
 	}
+
 
 }

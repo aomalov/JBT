@@ -44,7 +44,7 @@ public class CustomerFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//name lookup
-		long ID=CouponDbHelper.getQueryResultLong("select ID from CUSTOMER where CUST_NAME='"+name+"'", "ID", cPool);
+		long ID=CouponDbHelper.getLoginLookup("select ID from CUSTOMER where CUST_NAME=?", "ID",name, cPool);
 		if(ID>0) innerCustomer=custDBDAO.read(ID);
 		else throw new CouponSystemException("Customer name at login is not valid");
 		if(password.equals(innerCustomer.getPASSWORD())) return this;

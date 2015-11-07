@@ -3,6 +3,8 @@
  */
 package jsmith.jbt.com.FACADE;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -46,7 +48,7 @@ public class CompanyFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//name lookup
-		long ID=CouponDbHelper.getQueryResultLong("select ID from COMPANY where COMP_NAME='"+name+"'", "ID", cPool);
+		long ID=CouponDbHelper.getLoginLookup("select ID from COMPANY where COMP_NAME=?", "ID",name,cPool);
 		if(ID>0) innerCompany=compDBDAO.read(ID);
 		else throw new CouponSystemException("Company name at login is not valid");
 		if(password.equals(innerCompany.getPASSWORD())) return this;
