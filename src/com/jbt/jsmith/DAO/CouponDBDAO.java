@@ -85,6 +85,7 @@ public class CouponDBDAO implements CouponDAO {
 				res.setSTART_DATE(rs.getDate("START_DATE"));
 				res.setEND_DATE(rs.getDate("END_DATE"));
 			}
+			else throw new CouponSystemException("No coupon exists with ID="+ID);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't read a row from Coupon DB table");		
 		}

@@ -3,11 +3,14 @@
  */
 package com.jbt.jsmith.DTO;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author andrew
  *
  * Company DTO
  */
+@XmlRootElement
 public class Company {
 	
 	private long ID ;
@@ -124,4 +127,10 @@ public class Company {
 		ID = iD;
 	} 
 	
+	
+	/**
+	 * Needed for JSON auto binding
+	 */
+	public Company() {
+	}
 }

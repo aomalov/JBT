@@ -96,6 +96,7 @@ public class CustomerDBDAO implements CustomerDAO {
 				res.setCUST_NAME(rs.getString("CUST_NAME"));
 				res.setPASSWORD(rs.getString("PASSWORD"));
 			}
+			else throw new CouponSystemException("No customer exists with ID="+ID);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't read a row from Customer DB table");		
 		}

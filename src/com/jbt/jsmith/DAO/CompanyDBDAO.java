@@ -72,6 +72,7 @@ public final class CompanyDBDAO implements CompanyDAO {
 				res.setPASSWORD(rs.getString("PASSWORD"));
 				res.setEMAIL(rs.getString("EMAIL"));
 			}
+			else throw new CouponSystemException("No company exists with ID="+ID);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't read a row from Company DB table");		
 		}
