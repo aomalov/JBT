@@ -6,7 +6,6 @@ package jsmith.jbt.com.FACADE;
 import java.util.Collection;
 
 import jsmith.jbt.com.ConnectionPool;
-import jsmith.jbt.com.CouponDbHelper;
 import jsmith.jbt.com.CouponSystemException;
 import jsmith.jbt.com.DAO.CompanyCouponDBDAO;
 import jsmith.jbt.com.DAO.CompanyDBDAO;

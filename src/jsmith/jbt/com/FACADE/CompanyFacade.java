@@ -3,8 +3,6 @@
  */
 package jsmith.jbt.com.FACADE;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
