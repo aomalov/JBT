@@ -54,7 +54,7 @@ public class AdminFacade implements CouponClientFacade {
 	
 	public void createCompany(Company comp) throws CouponSystemException {
 		//no such name
-		if(CouponDbHelper.getQueryResultLong("select count(*) as cnt from COMPANY where COMP_NAME='"+comp.getCOMP_NAME()+"'","cnt",cPool)==0) {
+		if(!compDBDAO.lookupByName(comp.getCOMP_NAME())) {
 			long id=compDBDAO.create(comp);
 			comp.setID(id);
 		}
@@ -89,7 +89,7 @@ public class AdminFacade implements CouponClientFacade {
 	
 	public void createCustomer(Customer cust) throws CouponSystemException {
 		//no such name
-		if(CouponDbHelper.getQueryResultLong("select count(*) as cnt from CUSTOMER where CUST_NAME='"+cust.getCUST_NAME()+"'","cnt",cPool)==0) {
+		if(! custDBDAO.lookupByName(cust.getCUST_NAME())) {
 			long id=custDBDAO.create(cust);
 			cust.setID(id);
 		}

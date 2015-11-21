@@ -53,8 +53,7 @@ public class CustomerFacade implements CouponClientFacade {
 
 	public void purchaseCoupon(Coupon aCoupon) throws CouponSystemException {
 	// TODO cannot buy an outdated coupon
-		long cnt=CouponDbHelper.getQueryResultLong("select count(COUPON_ID) as cnt from CUSTOMER_COUPON where CUST_ID="+innerCustomer.getID()+" and COUPON_ID="+aCoupon.getID(), "cnt", cPool);
-		if(cnt>0) throw new CouponSystemException("cannot purchase coupon twice");
+		if(custcouponDBDAO.lookupPair(innerCustomer.getID(), aCoupon.getID())) throw new CouponSystemException("cannot purchase coupon twice");
 		
 		Coupon safeCopy=couponDBDAO.read(aCoupon.getID());
 		if(safeCopy.getAMOUNT()>0) {

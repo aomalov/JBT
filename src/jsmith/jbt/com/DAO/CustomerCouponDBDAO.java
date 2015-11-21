@@ -131,4 +131,24 @@ public class CustomerCouponDBDAO implements CustomerCouponDAO {
 
 
 	}
+
+	@Override
+	public boolean lookupPair(long CUST_ID, long COUPON_ID) throws CouponSystemException {
+		boolean res;
+		Connection con=cPool.getConnection();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select count(COUPON_ID) as cnt from CUSTOMER_COUPON where CUST_ID=? and COUPON_ID=?");
+			pstmt.setLong(1, CUST_ID);
+			pstmt.setLong(2, COUPON_ID);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next() && rs.getLong("cnt")==0) res=false;
+			else res=true;
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read a row from CustomerCoupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
+	}
 }

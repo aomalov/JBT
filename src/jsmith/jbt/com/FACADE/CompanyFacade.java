@@ -57,7 +57,7 @@ public class CompanyFacade implements CouponClientFacade {
 	
 	public void createCoupon(Coupon aCoupon) throws CouponSystemException {
 		//no such name
-		if(CouponDbHelper.getQueryResultLong("select count(*) as cnt from COUPON where TITLE='"+aCoupon.getTITLE()+"'","cnt",cPool)==0) {
+		if(!couponDBDAO.lookupByName(aCoupon.getTITLE())) {
 			long id=couponDBDAO.create(aCoupon); //Create entity table record
 			aCoupon.setID(id);
 			compcouponDBDAO.create(innerCompany.getID(), id); //Link a coupon to the company

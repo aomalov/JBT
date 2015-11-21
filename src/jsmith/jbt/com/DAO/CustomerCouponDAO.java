@@ -17,4 +17,5 @@ public interface CustomerCouponDAO {
 	void delete(long CUST_ID, long COUPON_ID)  throws CouponSystemException;
 	void deleteAll(long CUST_ID)  throws CouponSystemException;
 	void deleteAllCoupons(long COUPON_ID)  throws CouponSystemException;
+	boolean lookupPair(long CUST_ID,long COUPON_ID) throws CouponSystemException;
 }

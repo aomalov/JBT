@@ -210,4 +210,23 @@ public class CouponDBDAO implements CouponDAO {
 		return res;
 	}
 
+	@Override
+	public boolean lookupByName(String name) throws CouponSystemException {
+		boolean res;
+		Connection con=cPool.getConnection();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select count(*) as cnt from COUPON where TITLE=?");
+			pstmt.setString(1, name);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next() && rs.getLong("cnt")==0) res=false;
+			else res=true;
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read rows from Coupon DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
+	}
+
 }

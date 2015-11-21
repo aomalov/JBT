@@ -160,7 +160,26 @@ public class CustomerDBDAO implements CustomerDAO {
 				res.add(new Customer(rs.getLong("ID"),rs.getString("CUST_NAME"),rs.getString("PASSWORD")));
 			}
 		} catch (SQLException e) {
-			throw new CouponSystemException("Couldn't rows from Customer DB table");		
+			throw new CouponSystemException("Couldn't read rows from Customer DB table");		
+		}
+		finally {
+			if(con!=null) cPool.returnConnection(con);
+		}
+		return res;
+	}
+
+	@Override
+	public boolean lookupByName(String name) throws CouponSystemException {
+		boolean res;
+		Connection con=cPool.getConnection();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("select count(*) as cnt from CUSTOMER where CUST_NAME=?");
+			pstmt.setString(1, name);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next() && rs.getLong("cnt")==0) res=false;
+			else res=true;
+		} catch (SQLException e) {
+			throw new CouponSystemException("Couldn't read rows from Customer DB table");		
 		}
 		finally {
 			if(con!=null) cPool.returnConnection(con);

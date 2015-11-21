@@ -20,4 +20,5 @@ public interface entityDAO<ET> {
 	void update(ET entity) throws CouponSystemException;
 	void delete(ET entity) throws CouponSystemException;
 	Collection<ET> readAll() throws CouponSystemException; 
+	boolean lookupByName(String name)  throws CouponSystemException; 
 }
