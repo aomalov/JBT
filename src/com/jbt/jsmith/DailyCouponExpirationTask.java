@@ -26,7 +26,6 @@ public class DailyCouponExpirationTask implements Runnable {
 	private final CustomerCouponDBDAO custcouponDBDAO;
 	private final CompanyCouponDBDAO compcouponDBDAO;
 	private final CouponDBDAO couponDBDAO;
-	private final ConnectionPool cPool;
 	private final TimeUnit tuPeriod;
 	private final  long periodValue;
 	private Date lastRun=null;
@@ -60,7 +59,7 @@ public class DailyCouponExpirationTask implements Runnable {
 	public DailyCouponExpirationTask(TimeUnit tuPeriod,long periodValue) throws CouponSystemException {
 		super();
 		quit=false;
-		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+		ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 		this.custcouponDBDAO=new CustomerCouponDBDAO();
 		this.compcouponDBDAO=new CompanyCouponDBDAO();
 		this.couponDBDAO=new CouponDBDAO();

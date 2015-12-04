@@ -30,7 +30,6 @@ public class TestCompanyCreate {
 	private String companyName;
 	private CompanyDBDAO compDbDao;
 	private AdminFacade adminFacade;
-	private ConnectionPool cPool;
 	private Company aComp;
 	
     @Parameters
@@ -46,7 +45,7 @@ public class TestCompanyCreate {
 
 	public TestCompanyCreate(String companyName) throws CouponSystemException {
 		this.companyName = companyName;
-		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+		ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 
 		this.compDbDao=new CompanyDBDAO();
 		this.adminFacade=new AdminFacade();

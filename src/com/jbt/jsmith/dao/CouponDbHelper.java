@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.jbt.jsmith.CouponSystem;
 import com.jbt.jsmith.CouponSystem.ClientType;
 import com.jbt.jsmith.CouponSystemException;
 
@@ -152,7 +151,11 @@ public class CouponDbHelper {
 				break;
 			case Client:
 				sql="select ID from CUSTOMER where CUST_NAME=?";
-				break;			
+				break;
+			case Admin:
+				throw new CouponSystemException("Cannot lookup admin login credentials");
+			default:
+				break;
 		}
 				
 		try {

@@ -27,7 +27,6 @@ public class TestCustomerCreate {
 	private String customerName;
 	private CustomerDBDAO custDbDao;
 	private AdminFacade adminFacade;
-	private ConnectionPool cPool;
 	private Customer aCust;
 	
     @Parameters
@@ -43,7 +42,7 @@ public class TestCustomerCreate {
 
 	public TestCustomerCreate(String customerName) throws CouponSystemException {
 		this.customerName = customerName;
-		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+		ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 
 		this.custDbDao=new CustomerDBDAO();
 		this.adminFacade=new AdminFacade();

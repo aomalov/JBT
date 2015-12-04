@@ -1,20 +1,8 @@
 package com.jbt.jsmith.test;
 
 import java.sql.Connection;
-import java.sql.Date;
-
 import com.jbt.jsmith.CouponSystemException;
-import com.jbt.jsmith.dao.CompanyCouponDBDAO;
-import com.jbt.jsmith.dao.CompanyDBDAO;
 import com.jbt.jsmith.dao.ConnectionPool;
-import com.jbt.jsmith.dao.CouponDBDAO;
-import com.jbt.jsmith.dao.CouponDbHelper;
-import com.jbt.jsmith.dao.CustomerCouponDBDAO;
-import com.jbt.jsmith.dao.CustomerDBDAO;
-import com.jbt.jsmith.dto.Company;
-import com.jbt.jsmith.dto.Coupon;
-import com.jbt.jsmith.dto.Customer;
-import com.jbt.jsmith.dto.Coupon.CouponType;
 
 /**
  * @author andrewm

@@ -10,7 +10,6 @@ import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.CouponSystem.ClientType;
 import com.jbt.jsmith.dao.CompanyCouponDBDAO;
 import com.jbt.jsmith.dao.CompanyDBDAO;
-import com.jbt.jsmith.dao.ConnectionPool;
 import com.jbt.jsmith.dao.CouponDBDAO;
 import com.jbt.jsmith.dao.CouponDbHelper;
 import com.jbt.jsmith.dao.CustomerCouponDBDAO;
