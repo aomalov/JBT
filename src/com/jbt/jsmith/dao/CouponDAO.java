@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.jbt.jsmith.DAO;
+package com.jbt.jsmith.dao;
 
 import java.sql.Date;
 import java.util.Collection;
 
 import com.jbt.jsmith.CouponSystemException;
-import com.jbt.jsmith.DTO.Coupon;
+import com.jbt.jsmith.dto.Coupon;
 
 /**
  * @author andrew

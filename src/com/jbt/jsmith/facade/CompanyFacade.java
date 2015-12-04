@@ -1,22 +1,22 @@
 /**
  * 
  */
-package com.jbt.jsmith.FACADE;
+package com.jbt.jsmith.facade;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.jbt.jsmith.ConnectionPool;
-import com.jbt.jsmith.CouponDbHelper;
 import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.CouponSystem.ClientType;
-import com.jbt.jsmith.DAO.CompanyCouponDBDAO;
-import com.jbt.jsmith.DAO.CompanyDBDAO;
-import com.jbt.jsmith.DAO.CouponDBDAO;
-import com.jbt.jsmith.DAO.CustomerCouponDBDAO;
-import com.jbt.jsmith.DTO.Company;
-import com.jbt.jsmith.DTO.Coupon;
-import com.jbt.jsmith.DTO.Coupon.CouponType;
+import com.jbt.jsmith.dao.CompanyCouponDBDAO;
+import com.jbt.jsmith.dao.CompanyDBDAO;
+import com.jbt.jsmith.dao.ConnectionPool;
+import com.jbt.jsmith.dao.CouponDBDAO;
+import com.jbt.jsmith.dao.CouponDbHelper;
+import com.jbt.jsmith.dao.CustomerCouponDBDAO;
+import com.jbt.jsmith.dto.Company;
+import com.jbt.jsmith.dto.Coupon;
+import com.jbt.jsmith.dto.Coupon.CouponType;
 
 /**
  * @author andrew
@@ -24,20 +24,18 @@ import com.jbt.jsmith.DTO.Coupon.CouponType;
  */
 public class CompanyFacade implements CouponClientFacade {
 
-	private final CompanyDBDAO compDBDAO;
-	private final CustomerCouponDBDAO custcouponDBDAO;
-	private final CompanyCouponDBDAO compcouponDBDAO;
-	private final ConnectionPool cPool;
+	private final CompanyDBDAO companyDBDAO;
+	private final CustomerCouponDBDAO customerCouponDBDAO;
+	private final CompanyCouponDBDAO companyCouponDBDAO;
 	private Company innerCompany=null;
 	private CouponDBDAO couponDBDAO;
 	
 	
 	public CompanyFacade() throws CouponSystemException{
-		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
-		this.compDBDAO=new CompanyDBDAO(cPool);
-		this.custcouponDBDAO=new CustomerCouponDBDAO(cPool);
-		this.compcouponDBDAO=new CompanyCouponDBDAO(cPool);
-		this.couponDBDAO=new CouponDBDAO(cPool);
+		this.companyDBDAO=new CompanyDBDAO();
+		this.customerCouponDBDAO=new CustomerCouponDBDAO();
+		this.companyCouponDBDAO=new CompanyCouponDBDAO();
+		this.couponDBDAO=new CouponDBDAO();
 	}
 	
 	/* (non-Javadoc)
@@ -46,8 +44,8 @@ public class CompanyFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//name lookup
-		long ID=CouponDbHelper.getLoginLookup("select ID from COMPANY where COMP_NAME=?", "ID",name,cPool);
-		if(ID>0) innerCompany=compDBDAO.read(ID);
+		long ID=CouponDbHelper.getLoginLookup(ClientType.Company, "ID",name);
+		if(ID>0) innerCompany=companyDBDAO.read(ID);
 		else throw new CouponSystemException("Company name at login is not valid");
 		if(password.equals(innerCompany.getPASSWORD())) return this;
 		else throw new CouponSystemException("password not valid");
@@ -58,16 +56,16 @@ public class CompanyFacade implements CouponClientFacade {
 		if(!couponDBDAO.lookupByName(aCoupon.getTITLE())) {
 			long id=couponDBDAO.create(aCoupon); //Create entity table record
 			aCoupon.setID(id);
-			compcouponDBDAO.create(innerCompany.getID(), id); //Link a coupon to the company
+			companyCouponDBDAO.create(innerCompany.getID(), id); //Link a coupon to the company
 		}
 		else throw new CouponSystemException("There is a coupon with title "+aCoupon.getTITLE());
 	}
 	
 	public void removeCoupon(Coupon aCoupon) throws CouponSystemException {
 		//deleting from Customers
-		custcouponDBDAO.deleteAllCoupons(aCoupon.getID());
+		customerCouponDBDAO.deleteAllCoupons(aCoupon.getID());
 		//deleting from Company
-		compcouponDBDAO.delete(innerCompany.getID(), aCoupon.getID());
+		companyCouponDBDAO.delete(innerCompany.getID(), aCoupon.getID());
 	}
 	
 	public void updateCoupon(Coupon aCoupon) throws CouponSystemException {
@@ -84,7 +82,7 @@ public class CompanyFacade implements CouponClientFacade {
 	
 	public Collection<Coupon> getAllCoupons() throws CouponSystemException {
 		Collection<Coupon> res=new ArrayList<>();
-		for(long couponID: compcouponDBDAO.readAll(innerCompany.getID())){
+		for(long couponID: companyCouponDBDAO.readAll(innerCompany.getID())){
 			res.add(couponDBDAO.read(couponID));		
 		}
 		return res;
@@ -92,7 +90,7 @@ public class CompanyFacade implements CouponClientFacade {
 
 	public Collection<Coupon> getCouponByType(CouponType type) throws CouponSystemException {
 		Collection<Coupon> res=new ArrayList<>();
-		for(long couponID: compcouponDBDAO.readAll(innerCompany.getID())){
+		for(long couponID: companyCouponDBDAO.readAll(innerCompany.getID())){
 			if(couponDBDAO.read(couponID).getTYPE().equals(type)) res.add(couponDBDAO.read(couponID));		
 		}
 		return res;
@@ -100,7 +98,7 @@ public class CompanyFacade implements CouponClientFacade {
 
 	public Collection<Coupon> getCouponByPrice(Double price) throws CouponSystemException {
 		Collection<Coupon> res=new ArrayList<>();
-		for(long couponID: compcouponDBDAO.readAll(innerCompany.getID())){
+		for(long couponID: companyCouponDBDAO.readAll(innerCompany.getID())){
 			if(couponDBDAO.read(couponID).getPRICE()<=price) res.add(couponDBDAO.read(couponID));		
 		}
 		return res;

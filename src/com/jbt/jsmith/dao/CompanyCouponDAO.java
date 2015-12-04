@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jbt.jsmith.DAO;
+package com.jbt.jsmith.dao;
 
 import java.util.Collection;
 

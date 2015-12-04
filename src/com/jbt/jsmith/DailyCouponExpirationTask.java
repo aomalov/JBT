@@ -7,10 +7,12 @@ import java.sql.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
-import com.jbt.jsmith.DAO.CompanyCouponDBDAO;
-import com.jbt.jsmith.DAO.CouponDBDAO;
-import com.jbt.jsmith.DAO.CustomerCouponDBDAO;
-import com.jbt.jsmith.DTO.Coupon;
+import com.jbt.jsmith.dao.CompanyCouponDBDAO;
+import com.jbt.jsmith.dao.ConnectionPool;
+import com.jbt.jsmith.dao.CouponDBDAO;
+import com.jbt.jsmith.dao.CouponDbHelper;
+import com.jbt.jsmith.dao.CustomerCouponDBDAO;
+import com.jbt.jsmith.dto.Coupon;
 
 /**
  * @author andrew
@@ -59,9 +61,9 @@ public class DailyCouponExpirationTask implements Runnable {
 		super();
 		quit=false;
 		this.cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
-		this.custcouponDBDAO=new CustomerCouponDBDAO(cPool);
-		this.compcouponDBDAO=new CompanyCouponDBDAO(cPool);
-		this.couponDBDAO=new CouponDBDAO(cPool);
+		this.custcouponDBDAO=new CustomerCouponDBDAO();
+		this.compcouponDBDAO=new CompanyCouponDBDAO();
+		this.couponDBDAO=new CouponDBDAO();
 		this.tuPeriod=tuPeriod;
 		this.periodValue=periodValue;
 	}

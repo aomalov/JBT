@@ -5,10 +5,11 @@ package com.jbt.jsmith;
 
 import java.util.concurrent.TimeUnit;
 
-import com.jbt.jsmith.FACADE.AdminFacade;
-import com.jbt.jsmith.FACADE.CompanyFacade;
-import com.jbt.jsmith.FACADE.CouponClientFacade;
-import com.jbt.jsmith.FACADE.CustomerFacade;
+import com.jbt.jsmith.dao.ConnectionPool;
+import com.jbt.jsmith.facade.AdminFacade;
+import com.jbt.jsmith.facade.CompanyFacade;
+import com.jbt.jsmith.facade.CouponClientFacade;
+import com.jbt.jsmith.facade.CustomerFacade;
 
 /**
  * @author andrew

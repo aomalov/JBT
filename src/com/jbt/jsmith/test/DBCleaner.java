@@ -1,11 +1,11 @@
 /**
  * 
  */
-package com.jbt.jsmith.TEST;
+package com.jbt.jsmith.test;
 
-import com.jbt.jsmith.ConnectionPool;
-import com.jbt.jsmith.CouponDbHelper;
 import com.jbt.jsmith.CouponSystemException;
+import com.jbt.jsmith.dao.ConnectionPool;
+import com.jbt.jsmith.dao.CouponDbHelper;
 
 /**
  * @author andrew

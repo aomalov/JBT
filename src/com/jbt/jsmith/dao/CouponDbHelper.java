@@ -1,4 +1,4 @@
-package com.jbt.jsmith;
+package com.jbt.jsmith.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,6 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import com.jbt.jsmith.CouponSystem;
+import com.jbt.jsmith.CouponSystem.ClientType;
+import com.jbt.jsmith.CouponSystemException;
 
 /**
  * @author andrew
@@ -137,16 +141,26 @@ public class CouponDbHelper {
 	 * @return ID for login lookup before a FACADE instance is returned
 	 * @throws CouponSystemException
 	 */
-	public static long getLoginLookup(String sql,String fieldName,String searchVal, ConnectionPool cPool) throws CouponSystemException {
+	public static long getLoginLookup(ClientType clientType, String fieldName,String searchVal) throws CouponSystemException {
 		long res=0;
+		String sql = null;
+		ConnectionPool cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 		
+		switch (clientType) {
+			case Company:
+				sql="select ID from COMPANY where COMP_NAME=?";
+				break;
+			case Client:
+				sql="select ID from CUSTOMER where CUST_NAME=?";
+				break;			
+		}
+				
 		try {
 			PreparedStatement pstmt=cPool.getConnection().prepareStatement(sql);
 			pstmt.setString(1, searchVal);
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next()) res=rs.getLong(fieldName);
 		} catch (SQLException e) {
-			// 
 			throw new CouponSystemException("Error in DB query for field"+fieldName);
 		}
 	

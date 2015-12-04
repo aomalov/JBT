@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jbt.jsmith.DAO;
+package com.jbt.jsmith.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.jbt.jsmith.ConnectionPool;
-import com.jbt.jsmith.CouponDbHelper;
 import com.jbt.jsmith.CouponSystemException;
-import com.jbt.jsmith.DTO.Company;
-import com.jbt.jsmith.DTO.Coupon;
+import com.jbt.jsmith.dto.Company;
+import com.jbt.jsmith.dto.Coupon;
 
 /**
  * @author andrew
@@ -27,10 +25,11 @@ public final class CompanyDBDAO implements CompanyDAO {
 
 	/**
 	 * @param cPool
+	 * @throws CouponSystemException 
 	 */
-	public CompanyDBDAO(ConnectionPool cPool) {
+	public CompanyDBDAO() throws CouponSystemException {
 		super();
-		this.cPool = cPool;
+		this.cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 	}
 
 	/* (non-Javadoc)

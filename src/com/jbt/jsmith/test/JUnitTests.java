@@ -1,4 +1,4 @@
-package com.jbt.jsmith.TEST;
+package com.jbt.jsmith.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

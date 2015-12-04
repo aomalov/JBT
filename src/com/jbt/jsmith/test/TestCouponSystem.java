@@ -1,22 +1,22 @@
 /**
  * 
  */
-package com.jbt.jsmith.TEST;
+package com.jbt.jsmith.test;
 
 import java.sql.Date;
 
-import com.jbt.jsmith.ConnectionPool;
-import com.jbt.jsmith.CouponDbHelper;
 import com.jbt.jsmith.CouponSystem;
 import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.CouponSystem.ClientType;
-import com.jbt.jsmith.DTO.Company;
-import com.jbt.jsmith.DTO.Coupon;
-import com.jbt.jsmith.DTO.Customer;
-import com.jbt.jsmith.DTO.Coupon.CouponType;
-import com.jbt.jsmith.FACADE.AdminFacade;
-import com.jbt.jsmith.FACADE.CompanyFacade;
-import com.jbt.jsmith.FACADE.CustomerFacade;
+import com.jbt.jsmith.dao.ConnectionPool;
+import com.jbt.jsmith.dao.CouponDbHelper;
+import com.jbt.jsmith.dto.Company;
+import com.jbt.jsmith.dto.Coupon;
+import com.jbt.jsmith.dto.Customer;
+import com.jbt.jsmith.dto.Coupon.CouponType;
+import com.jbt.jsmith.facade.AdminFacade;
+import com.jbt.jsmith.facade.CompanyFacade;
+import com.jbt.jsmith.facade.CustomerFacade;
 
 /**
  * @author andrew

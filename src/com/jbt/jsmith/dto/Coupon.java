@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jbt.jsmith.DTO;
+package com.jbt.jsmith.dto;
 
 import java.sql.Date;
 

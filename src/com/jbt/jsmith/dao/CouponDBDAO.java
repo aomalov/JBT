@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jbt.jsmith.DAO;
+package com.jbt.jsmith.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -12,11 +12,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.jbt.jsmith.ConnectionPool;
-import com.jbt.jsmith.CouponDbHelper;
 import com.jbt.jsmith.CouponSystemException;
-import com.jbt.jsmith.DTO.Coupon;
-import com.jbt.jsmith.DTO.Coupon.CouponType;
+import com.jbt.jsmith.dto.Coupon;
+import com.jbt.jsmith.dto.Coupon.CouponType;
 
 /**
  * @author andrew
@@ -28,11 +26,12 @@ public class CouponDBDAO implements CouponDAO {
 	
 	
 	/**
+	 * @throws CouponSystemException 
 	 * 
 	 */
-	public CouponDBDAO(ConnectionPool cPool) {
+	public CouponDBDAO() throws CouponSystemException {
 		super();
-		this.cPool = cPool;
+		this.cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);;
 	}
 
 	/* (non-Javadoc)

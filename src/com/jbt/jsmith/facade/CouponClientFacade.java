@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jbt.jsmith.FACADE;
+package com.jbt.jsmith.facade;
 
 import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.CouponSystem.ClientType;
