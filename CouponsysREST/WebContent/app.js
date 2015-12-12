@@ -13,7 +13,7 @@ couponApp.config(function ($routeProvider) {
         controller: 'mainController'
     })
     
-    .when('/signin', {
+    .when('/login', {
         templateUrl: 'login.htm',
         controller: 'mainController'
     })
@@ -24,7 +24,7 @@ couponApp.config(function ($routeProvider) {
     })
     
     .when('/listCompanies', {
-        templateUrl: 'index.html',
+        templateUrl: 'company_report.htm',
         controller: 'companyController'
     })
         
@@ -52,11 +52,20 @@ couponApp.controller('mainController', ['$scope', '$filter', '$http', function (
 }]);
 
 couponApp.controller('companyController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
-    $http.get('rest/company' )
+	
+    $scope.getCompanies = function() {
+        return $scope.companyList.slice(($scope.currentPage-1)*$scope.itemsPerPage,$scope.currentPage*$scope.itemsPerPage);
+    };
+    
+    $http.get('rest/company/all' )
         .success(function (result) {
 
             console.log(result);
-            $scope.templateUrl="index.html"
+            $scope.companyList = result.company;
+            $scope.totalItems = $scope.companyList.length;
+            $scope.itemsPerPage = 3;
+            $scope.currentPage = 1
+            //$scope.templateUrl="index.html"
 
         })
         .error(function (data, status) {
@@ -65,3 +74,16 @@ couponApp.controller('companyController', ['$scope', '$filter', '$http', functio
 
         });
 }]);
+
+// DIRECTIVES
+
+couponApp.directive("companyReport", function() {
+   return {
+       restrict: 'E',
+       templateUrl: 'company_card.htm',
+       replace: true,
+       scope: {
+           comp: "=company"
+       }
+   }
+});

@@ -1,0 +1,11 @@
+<H1>Company Report</H1>
+<hr />
+<uib-pagination total-items="totalItems" items-per-page="itemsPerPage" ng-model="currentPage"></uib-pagination>
+<hr />
+<div ng-repeat="c in getCompanies()">
+    <div class="row">
+        <div class="col-md-12">
+            <company-report company="c" ></company-report>
+        </div>
+    </div>
+</div> 

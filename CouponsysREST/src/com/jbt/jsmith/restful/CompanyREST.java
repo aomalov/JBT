@@ -30,7 +30,7 @@ import com.jbt.jsmith.facade.AdminFacade;
  * @author andrew
  *
  */
-@Path("/company")
+@Path("/company/all")
 public class CompanyREST {
 	
 	@GET
