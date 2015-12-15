@@ -31,7 +31,7 @@ public class CouponDBDAO implements CouponDAO {
 	 */
 	public CouponDBDAO() throws CouponSystemException {
 		super();
-		this.cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);;
+		this.cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 	}
 
 	/* (non-Javadoc)

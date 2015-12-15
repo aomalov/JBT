@@ -3,6 +3,8 @@
  */
 package com.jbt.jsmith.facade;
 
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.Collection;
 
 import com.jbt.jsmith.CouponSystemException;
@@ -11,6 +13,7 @@ import com.jbt.jsmith.dao.CompanyCouponDBDAO;
 import com.jbt.jsmith.dao.CompanyDBDAO;
 import com.jbt.jsmith.dao.CustomerCouponDBDAO;
 import com.jbt.jsmith.dao.CustomerDBDAO;
+import com.jbt.jsmith.dao.security.Owasp;
 import com.jbt.jsmith.dto.Company;
 import com.jbt.jsmith.dto.Customer;
 
@@ -43,8 +46,15 @@ public class AdminFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//TODO seems to be a missfit so far with this CouponClientFacade interface
-		if(name.equals("Admin") && password.equals("1234")) return this;
-		else throw new CouponSystemException("Name or password not valid");
+		try {
+			if(Owasp.authenticate(companyDBDAO.getConnectionPool().getConnection(), name, password)) 
+				return this;
+			else 
+				throw new CouponSystemException("Name or password not valid");
+		} catch (NoSuchAlgorithmException | SQLException e) {
+			// TODO Auto-generated catch block
+			throw new CouponSystemException("Error during login procedure");
+		}
 	}
 	
 	public void createCompany(Company comp) throws CouponSystemException {

@@ -3,6 +3,8 @@
  */
 package com.jbt.jsmith.facade;
 
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,6 +14,7 @@ import com.jbt.jsmith.dao.CouponDBDAO;
 import com.jbt.jsmith.dao.CouponDbHelper;
 import com.jbt.jsmith.dao.CustomerCouponDBDAO;
 import com.jbt.jsmith.dao.CustomerDBDAO;
+import com.jbt.jsmith.dao.security.Owasp;
 import com.jbt.jsmith.dto.Coupon;
 import com.jbt.jsmith.dto.Customer;
 import com.jbt.jsmith.dto.Coupon.CouponType;
@@ -43,8 +46,14 @@ public class CustomerFacade implements CouponClientFacade {
 		long ID=CouponDbHelper.getLoginLookup(ClientType.Client, "ID",name);
 		if(ID>0) innerCustomer=customerDBDAO.read(ID);
 		else throw new CouponSystemException("Customer name at login is not valid");
-		if(password.equals(innerCustomer.getPASSWORD())) return this;
-		else throw new CouponSystemException("password not valid");
+		try {
+			if(Owasp.authenticate(customerDBDAO.getConnectionPool().getConnection(), name, password))	
+				return this;
+			else throw new CouponSystemException("password not valid");
+		} catch (NoSuchAlgorithmException | SQLException e) {
+			// TODO Auto-generated catch block
+			throw new CouponSystemException("Error during login procedure");
+		}
 	}
 
 	public void purchaseCoupon(Coupon aCoupon) throws CouponSystemException {

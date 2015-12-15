@@ -126,6 +126,25 @@ public class Owasp {
           close(ps);
       }
   }
+  
+  
+  public static boolean dropUser(Connection con, String login)
+          throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException
+  {
+      PreparedStatement ps = null;
+      try {
+          if (login!=null){
+              ps = con.prepareStatement("DELETE FROM CREDENTIAL WHERE LOGIN=?");
+              ps.setString(1,login);
+              ps.executeUpdate();
+              return true;
+          } else {
+              return false;
+          }
+      } finally {
+          close(ps);
+      }
+  }
 
 
   /**
@@ -161,7 +180,15 @@ public class Owasp {
       }
   }
 
-
+  public  static void dropTable(Connection con) throws SQLException{
+      Statement st = null;
+      try {
+          st = con.createStatement();
+          st.execute("DROP TABLE CREDENTIAL");
+      } finally {
+          close(st);
+      }
+  }
 
   /**
    * Closes the current statement

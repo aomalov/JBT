@@ -54,7 +54,7 @@ public class TestCouponSystem {
 			System.out.println("Created customer #"+testCust.getID());
 			
 			CompanyFacade compFacade=(CompanyFacade)theCouponius.login("Company "+identity_cnt, "1234", ClientType.Company);
-			Coupon testCoupon=new Coupon(0, CouponType.HEALTHCARE, "Coupon "+identity_cnt, "msg", "iMAGE", 2, 15.0, Date.valueOf("2015-1-1"), Date.valueOf("2015-12-1"));
+			Coupon testCoupon=new Coupon(0, CouponType.HEALTHCARE, "Coupon "+identity_cnt, "msg", "iMAGE", 2, 15.0, Date.valueOf("2015-1-1"), Date.valueOf("2016-12-1"));
 			
 			compFacade.createCoupon(testCoupon);
 			System.out.println("Created coupon #"+testCoupon.getID());

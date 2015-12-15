@@ -3,6 +3,8 @@
  */
 package com.jbt.jsmith.dao;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.jbt.jsmith.CouponSystemException;
+import com.jbt.jsmith.dao.security.Owasp;
 import com.jbt.jsmith.dto.Company;
 import com.jbt.jsmith.dto.Coupon;
 
@@ -31,6 +34,17 @@ public final class CompanyDBDAO implements CompanyDAO {
 		super();
 		this.cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
 	}
+	
+
+
+	/**
+	 * @return the cPool
+	 */
+	public ConnectionPool getConnectionPool() {
+		return cPool;
+	}
+
+
 
 	/* (non-Javadoc)
 	 * @see jsmith.jbt.com.entityDAO#create(java.lang.Object)
@@ -40,12 +54,13 @@ public final class CompanyDBDAO implements CompanyDAO {
 		Connection con=cPool.getConnection();
 		long res;
 		try {
-			PreparedStatement pstmt = con.prepareStatement("insert into COMPANY(COMP_NAME,PASSWORD,EMAIL) values(?,?,?)",Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement pstmt = con.prepareStatement("insert into COMPANY(COMP_NAME,EMAIL) values(?,?)",Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, entity.getCOMP_NAME());
-			pstmt.setString(2, entity.getPASSWORD());
-			pstmt.setString(3, entity.getEMAIL());
+			pstmt.setString(2, entity.getEMAIL());
 			res=CouponDbHelper.getDBIdentityField(pstmt);
-		} catch (SQLException e) {
+			Owasp.createUser(con, entity.getCOMP_NAME(), entity.getPASSWORD());
+		} 
+		catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't insert into Company DB table");		
 		}
 		finally {
@@ -62,13 +77,12 @@ public final class CompanyDBDAO implements CompanyDAO {
 		Connection con=cPool.getConnection();
 		Company res=new Company(ID,"","","");
 		try {
-			PreparedStatement pstmt = con.prepareStatement("select COMP_NAME,PASSWORD,EMAIL from COMPANY where ID=?");
+			PreparedStatement pstmt = con.prepareStatement("select COMP_NAME,EMAIL from COMPANY where ID=?");
 			pstmt.setLong(1, ID);
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next())
 			{
 				res.setCOMP_NAME(rs.getString("COMP_NAME"));
-				res.setPASSWORD(rs.getString("PASSWORD"));
 				res.setEMAIL(rs.getString("EMAIL"));
 			}
 			else throw new CouponSystemException("No company exists with ID="+ID);
@@ -88,13 +102,15 @@ public final class CompanyDBDAO implements CompanyDAO {
 	public void update(Company entity) throws CouponSystemException {
 		Connection con=cPool.getConnection();
 		try {
-			PreparedStatement pstmt = con.prepareStatement("update COMPANY set COMP_NAME=?,PASSWORD=?,EMAIL=? where ID=?");
-			pstmt.setLong(4, entity.getID());
+			PreparedStatement pstmt = con.prepareStatement("update COMPANY set COMP_NAME=?,EMAIL=? where ID=?");
+			pstmt.setLong(3, entity.getID());
 			pstmt.setString(1, entity.getCOMP_NAME());
-			pstmt.setString(2, entity.getPASSWORD());
-			pstmt.setString(3, entity.getEMAIL());
+			pstmt.setString(2, entity.getEMAIL());
 			pstmt.executeUpdate();
-		} catch (SQLException e) {
+			Owasp.dropUser(con, entity.getCOMP_NAME());
+			Owasp.createUser(con, entity.getCOMP_NAME(),entity.getPASSWORD());
+		} 
+		catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't update Company DB table");		
 		}
 		finally {
@@ -138,7 +154,8 @@ public final class CompanyDBDAO implements CompanyDAO {
 			PreparedStatement pstmt = con.prepareStatement("delete from Company where ID=?");
 			pstmt.setLong(1, entity.getID());
 			pstmt.executeUpdate();
-		} catch (SQLException e) {
+			Owasp.dropUser(con, entity.getCOMP_NAME());
+		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't delete from Company DB table");		
 		}
 		finally {
@@ -154,11 +171,11 @@ public final class CompanyDBDAO implements CompanyDAO {
 		Connection con=cPool.getConnection();
 		Collection<Company> res=new ArrayList<>() ;
 		try {
-			PreparedStatement pstmt = con.prepareStatement("select ID,COMP_NAME,PASSWORD,EMAIL from COMPANY");
+			PreparedStatement pstmt = con.prepareStatement("select ID,COMP_NAME,EMAIL from COMPANY");
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next())
 			{
-				res.add(new Company(rs.getLong("ID"),rs.getString("COMP_NAME"),rs.getString("PASSWORD"),rs.getString("EMAIL")));
+				res.add(new Company(rs.getLong("ID"),rs.getString("COMP_NAME"),"empty_password",rs.getString("EMAIL")));
 			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't rows from Company DB table");		

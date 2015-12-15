@@ -3,6 +3,8 @@
  */
 package com.jbt.jsmith.dao;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.jbt.jsmith.CouponSystemException;
+import com.jbt.jsmith.dao.security.Owasp;
 import com.jbt.jsmith.dto.Coupon;
 import com.jbt.jsmith.dto.Customer;
 
@@ -22,6 +25,14 @@ import com.jbt.jsmith.dto.Customer;
 public class CustomerDBDAO implements CustomerDAO {
 
 	private final ConnectionPool cPool;
+	
+	/**
+	 * @return the cPool
+	 */
+	public ConnectionPool getConnectionPool() {
+		return cPool;
+	}
+	
 	/* (non-Javadoc)
 	 * @see jsmith.jbt.com.entityDAO#create(java.lang.Object)
 	 */
@@ -30,11 +41,11 @@ public class CustomerDBDAO implements CustomerDAO {
 		Connection con=cPool.getConnection();
 		long res;
 		try {
-			PreparedStatement pstmt = con.prepareStatement("insert into CUSTOMER(CUST_NAME,PASSWORD) values(?,?)",Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement pstmt = con.prepareStatement("insert into CUSTOMER(CUST_NAME) values(?)",Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, entity.getCUST_NAME());
-			pstmt.setString(2, entity.getPASSWORD());
 			res=CouponDbHelper.getDBIdentityField(pstmt);
-		} catch (SQLException e) {
+			Owasp.createUser(con, entity.getCUST_NAME(), entity.getPASSWORD());
+		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't insert into Customer DB table");		
 		}
 		finally {
@@ -87,13 +98,12 @@ public class CustomerDBDAO implements CustomerDAO {
 		Connection con=cPool.getConnection();
 		Customer res=new Customer(ID,"","");
 		try {
-			PreparedStatement pstmt = con.prepareStatement("select CUST_NAME,PASSWORD from CUSTOMER where ID=?");
+			PreparedStatement pstmt = con.prepareStatement("select CUST_NAME from CUSTOMER where ID=?");
 			pstmt.setLong(1, ID);
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next())
 			{
 				res.setCUST_NAME(rs.getString("CUST_NAME"));
-				res.setPASSWORD(rs.getString("PASSWORD"));
 			}
 			else throw new CouponSystemException("No customer exists with ID="+ID);
 		} catch (SQLException e) {
@@ -112,12 +122,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	public void update(Customer entity) throws CouponSystemException {
 		Connection con=cPool.getConnection();
 		try {
-			PreparedStatement pstmt = con.prepareStatement("update CUSTOMER set CUST_NAME=?,PASSWORD=? where ID=?");
-			pstmt.setLong(3, entity.getID());
+			PreparedStatement pstmt = con.prepareStatement("update CUSTOMER set CUST_NAME=? where ID=?");
+			pstmt.setLong(2, entity.getID());
 			pstmt.setString(1, entity.getCUST_NAME());
-			pstmt.setString(2, entity.getPASSWORD());
 			pstmt.executeUpdate();
-		} catch (SQLException e) {
+			Owasp.dropUser(con, entity.getCUST_NAME());
+			Owasp.createUser(con, entity.getCUST_NAME(),entity.getPASSWORD());
+		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't update Customer DB table");		
 		}
 		finally {
@@ -136,7 +147,8 @@ public class CustomerDBDAO implements CustomerDAO {
 			PreparedStatement pstmt = con.prepareStatement("delete from CUSTOMER where ID=?");
 			pstmt.setLong(1, entity.getID());
 			pstmt.executeUpdate();
-		} catch (SQLException e) {
+			Owasp.dropUser(con, entity.getCUST_NAME());
+		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't delete from Customer DB table");		
 		}
 		finally {
@@ -154,11 +166,11 @@ public class CustomerDBDAO implements CustomerDAO {
 		Connection con=cPool.getConnection();
 		Collection<Customer> res=new ArrayList<>();
 		try {
-			PreparedStatement pstmt = con.prepareStatement("select ID,CUST_NAME,PASSWORD from CUSTOMER");
+			PreparedStatement pstmt = con.prepareStatement("select ID,CUST_NAME from CUSTOMER");
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next())
 			{
-				res.add(new Customer(rs.getLong("ID"),rs.getString("CUST_NAME"),rs.getString("PASSWORD")));
+				res.add(new Customer(rs.getLong("ID"),rs.getString("CUST_NAME"),"empty_password"));
 			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("Couldn't read rows from Customer DB table");		

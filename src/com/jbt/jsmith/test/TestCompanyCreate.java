@@ -56,7 +56,7 @@ public class TestCompanyCreate {
 	 */
 	@Before
 	public void setUp() throws Exception { //is run before each test on each iteration
-		aComp=new Company(0,companyName,"","");
+		aComp=new Company(0,companyName,"password01","");
 	}
 
 	/**
