@@ -28,7 +28,7 @@ import com.jbt.jsmith.facade.CouponClientFacade;
  *
  */
 @Path("/logon")
-public class TestREST {
+public class LoginServlet {
 
 	@GET
 	@Path("/{path}")
@@ -44,8 +44,7 @@ public class TestREST {
 						  @FormParam("password") String password, 
 						  @FormParam("clientType") int clientType,
 						  @Context HttpServletRequest httpRequest,
-						  @Context HttpServletResponse httpResponse
-						  ) {
+						  @Context HttpServletResponse httpResponse) {
 		
 		CouponClientFacade aFacade=null;
 		ClientType loginClientType = null;

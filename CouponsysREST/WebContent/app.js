@@ -26,7 +26,7 @@ couponApp.config(function ($routeProvider) {
     .when('/listCompanies', {
         templateUrl: 'company_report.htm',
         controller: 'companyController'
-    })
+    });
         
 });
 
@@ -54,23 +54,38 @@ couponApp.controller('mainController', ['$scope', '$filter', '$http', function (
 couponApp.controller('companyController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
 	
     $scope.getCompanies = function() {
-        return $scope.companyList.slice(($scope.currentPage-1)*$scope.itemsPerPage,$scope.currentPage*$scope.itemsPerPage);
+    	if($scope.totalItems>0)
+          return $scope.companyList.slice(($scope.currentPage-1)*$scope.itemsPerPage,$scope.currentPage*$scope.itemsPerPage);
     };
+    
+    $scope.totalItems = 0;
     
     $http.get('rest/company/all' )
         .success(function (result) {
 
+        	console.log("result");
             console.log(result);
-            $scope.companyList = result.company;
-            $scope.totalItems = $scope.companyList.length;
-            $scope.itemsPerPage = 3;
-            $scope.currentPage = 1
+            if(result.error) 
+//TODO - display alert message with bootstrap
+            	console.log(result);
+            else {
+	            $scope.companyList = result.company;
+	            $scope.totalItems = $scope.companyList.length;
+	            $scope.itemsPerPage = 3;
+	            $scope.currentPage = 1;
+            }
             //$scope.templateUrl="index.html"
 
         })
         .error(function (data, status) {
 
+        	console.log("data");
             console.log(data);
+            console.log("status");
+            console.log(status);
+            $scope.totalItems = 0;
+            //$scope.templateUrl="page1.htm";
+            window.location.href = '/CouponsysREST/'; 
 
         });
 }]);
