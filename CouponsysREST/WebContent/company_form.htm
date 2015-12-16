@@ -1,0 +1,32 @@
+<uib-alert type="{{alertType}}" ng-show="alertText.length>0" close="alertText=''" dismiss-on-timeout="5000">{{alertText}}</uib-alert>
+
+<H1>New company</H1>
+<HR>
+<form class="form-horizontal" action="rest/company/new" method="post">
+  <div class="form-group">  
+    <label for="inputName" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+          <input type="text" id="inputName" class="form-control" name="companyName" placeholder="Company name" ng-model=companyName>
+    </div>
+  </div>
+  <div class="form-group">  
+    <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+          <span class="input-group-addon" id="sizing-addon2">@</span>
+          <input type="text" id="inputEmail" class="form-control" name="email" placeholder="Company Email" aria-describedby="sizing-addon2" ng-model=companyEmail>
+        </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password" ng-model=password>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="button" class="btn btn-primary btn-lg" ng-click="createCompany()">Create company</button>
+    </div>
+  </div>
+</form>

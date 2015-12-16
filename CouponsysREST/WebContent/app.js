@@ -26,6 +26,10 @@ couponApp.config(function ($routeProvider) {
     .when('/listCompanies', {
         templateUrl: 'company_report.htm',
         controller: 'companyController'
+    })
+    .when('/newCompany', {
+        templateUrl: 'company_form.htm',
+        controller: 'companyNewController'
     });
         
 });
@@ -51,6 +55,36 @@ couponApp.controller('mainController', ['$scope', '$filter', '$http', function (
     
 }]);
 
+couponApp.controller('companyNewController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+	
+	$scope.createCompany = function() {
+		var aCompany = { COMP_NAME: $scope.companyName, EMAIL: $scope.companyEmail, ID: 0, PASSWORD: $scope.password };
+		console.log(aCompany);
+        
+        $http.post('rest/company/new',aCompany)
+        .success(function (result) {
+            if(result.error) {
+                $scope.alertType = "danger";
+                $scope.alertText = result.error; 
+            	console.log(result);
+            }
+            else {
+                $scope.alertText = result.messageText;
+                $scope.alertType = result.messageType;
+            	console.log(result);
+            }
+        })
+        .error(function (data, status) {
+            console.log(status);
+            $scope.alertText = "Error";
+            $scope.alertType = "danger";
+            //window.location.href = '/CouponsysREST/'; 
+        });
+		
+	};
+    
+}]);
+
 couponApp.controller('companyController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
 	
     $scope.getCompanies = function() {
@@ -65,27 +99,20 @@ couponApp.controller('companyController', ['$scope', '$filter', '$http', functio
 
         	console.log("result");
             console.log(result);
-            if(result.error) 
-//TODO - display alert message with bootstrap
+            if(result.error) {
+                $scope.alertText = result.error; 
             	console.log(result);
+            }
             else {
 	            $scope.companyList = result.company;
 	            $scope.totalItems = $scope.companyList.length;
 	            $scope.itemsPerPage = 3;
 	            $scope.currentPage = 1;
             }
-            //$scope.templateUrl="index.html"
-
         })
         .error(function (data, status) {
-
-        	console.log("data");
-            console.log(data);
-            console.log("status");
             console.log(status);
-            $scope.totalItems = 0;
-            //$scope.templateUrl="page1.htm";
-            window.location.href = '/CouponsysREST/'; 
+            //window.location.href = '/CouponsysREST/'; 
 
         });
 }]);

@@ -32,7 +32,7 @@ public class CompanyREST {
 	@Path("/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Company> getCompanies(@PathParam("id") long ID, @Context HttpServletRequest httpServletRequest) {
+	public Collection<Company> getCompanies(@Context HttpServletRequest httpServletRequest) {
 		Collection<Company> res=null;
  
 		try {
@@ -84,14 +84,23 @@ public class CompanyREST {
 		return Response.status(200).entity(aComp.toString()).build();
 	}
 	
+	@Path("/new")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_HTML)
-	public Response postCompany(Company aComp) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public RestJsonMessage createCompany(Company aComp, @Context HttpServletRequest httpServletRequest) {
 		
 		System.out.println("[POST COMPANY] "+aComp);
- 
-		return Response.status(200).entity(aComp.toString()).build();
+		try {
+		  AdminFacade admin=(AdminFacade) httpServletRequest.getSession().getAttribute("userFacade");
+		  admin.createCompany(aComp);
+		}
+		catch (CouponSystemException ex)
+		{
+			System.out.println(ex.getMessage());
+			return new RestJsonMessage("danger", ex.getMessage());
+		}
+		return new RestJsonMessage("success", "Company created");
 	}
 
 }
