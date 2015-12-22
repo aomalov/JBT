@@ -88,9 +88,7 @@ public class CompanyREST {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public RestJsonMessage createCompany(Company aComp, @Context HttpServletRequest httpServletRequest) {
-		
-		System.out.println("[POST COMPANY] "+aComp);
+	public RestJsonMessage createCompany(Company aComp, @Context HttpServletRequest httpServletRequest) {		
 		try {
 		  AdminFacade admin=(AdminFacade) httpServletRequest.getSession().getAttribute("userFacade");
 		  admin.createCompany(aComp);

@@ -15,7 +15,7 @@ couponApp.config(function ($routeProvider) {
     
     .when('/login', {
         templateUrl: 'login.htm',
-        controller: 'mainController'
+        controller: 'loginController'
     })
     
     .when('/logout', {
@@ -55,7 +55,29 @@ couponApp.controller('mainController', ['$scope', '$filter', '$http', function (
     
 }]);
 
-couponApp.controller('companyNewController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+couponApp.controller('loginController', ['$scope', '$filter', '$http','restResponseService', function ($scope, $filter, $http,restResponseService) {
+	
+	$scope.doLogin = function() {
+        var aUser = { userName: $scope.userName, password: $scope.password, clientType: $scope.clientType };
+        $http.post('rest/logon',aUser)
+        .success(function (result) {
+            restResponseService.messageText = result.messageText;
+            restResponseService.messageType = result.messageType;
+            $scope.$emit('eventRestResponse');
+            console.log(result);
+        })
+        .error(function (data, status) {
+            console.log(status);
+            restResponseService.messageText  = "Error during logon";
+            restResponseService.messageType  = "danger";
+            $scope.$emit('eventRestResponse');
+            //window.location.href = '/CouponsysREST/'; 
+        });
+		
+	};
+    
+}]);
+couponApp.controller('companyNewController', ['$scope', '$filter', '$http','restResponseService', function ($scope, $filter, $http,restResponseService) {
 	
 	$scope.createCompany = function() {
 		var aCompany = { COMP_NAME: $scope.companyName, EMAIL: $scope.companyEmail, ID: 0, PASSWORD: $scope.password };
@@ -63,21 +85,15 @@ couponApp.controller('companyNewController', ['$scope', '$filter', '$http', func
         
         $http.post('rest/company/new',aCompany)
         .success(function (result) {
-            if(result.error) {
-                $scope.alertType = "danger";
-                $scope.alertText = result.error; 
-            	console.log(result);
-            }
-            else {
-                $scope.alertText = result.messageText;
-                $scope.alertType = result.messageType;
-            	console.log(result);
-            }
+            restResponseService.messageText = result.messageText;
+            restResponseService.messageType = result.messageType;
+            //$scope.$emit('eventRestResponse');
+            console.log(result);
         })
         .error(function (data, status) {
             console.log(status);
-            $scope.alertText = "Error";
-            $scope.alertType = "danger";
+            restResponseService.messageText  = "Error creating a company";
+            restResponseService.messageType  = "danger";
             //window.location.href = '/CouponsysREST/'; 
         });
 		
@@ -85,7 +101,7 @@ couponApp.controller('companyNewController', ['$scope', '$filter', '$http', func
     
 }]);
 
-couponApp.controller('companyController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+couponApp.controller('companyController', ['$scope', '$filter', '$http','restResponseService', function ($scope, $filter, $http,restResponseService) {
 	
     $scope.getCompanies = function() {
     	if($scope.totalItems>0)
@@ -93,14 +109,14 @@ couponApp.controller('companyController', ['$scope', '$filter', '$http', functio
     };
     
     $scope.totalItems = 0;
-    
+        
     $http.get('rest/company/all' )
         .success(function (result) {
 
-        	console.log("result");
             console.log(result);
-            if(result.error) {
-                $scope.alertText = result.error; 
+            if(result.messageText) {
+                restResponseService.messageText=result.messageText;
+                restResponseService.messageType=result.messageType;
             	console.log(result);
             }
             else {
@@ -113,12 +129,28 @@ couponApp.controller('companyController', ['$scope', '$filter', '$http', functio
         .error(function (data, status) {
             console.log(status);
             //window.location.href = '/CouponsysREST/'; 
-
         });
 }]);
 
-// DIRECTIVES
+couponApp.controller('restResponseController', ['$scope', 'restResponseService', function($scope, restResponseService) {
+    
+    $scope.$watch(function () { return restResponseService.messageText; }, function() {
+      $scope.messageText = restResponseService.messageText;
+      $scope.messageType = restResponseService.messageType;
+    });
+    
+    $scope.$watch('messageText', function() {
+       restResponseService.messageText = $scope.messageText; 
+    });
 
+    // $scope.$on('eventRestResponse', function() {
+    //   $scope.messageText = restResponseService.messageText;
+    //   $scope.messageType = restResponseService.messageType;    
+    //  });
+}]);
+
+
+// DIRECTIVES
 couponApp.directive("companyReport", function() {
    return {
        restrict: 'E',
@@ -128,4 +160,13 @@ couponApp.directive("companyReport", function() {
            comp: "=company"
        }
    }
+});
+
+
+// SERVICES
+couponApp.service('restResponseService', function() {
+   
+    this.messageText = "Welcome to Couponius !";
+    this.messageType = "success";
+    
 });

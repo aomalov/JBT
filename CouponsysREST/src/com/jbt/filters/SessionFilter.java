@@ -34,7 +34,10 @@ public class SessionFilter implements Filter {
 		{
 			((HttpServletResponse)response).setContentType("application/json");
 			PrintWriter out = ((HttpServletResponse)response).getWriter();
-			out.println("{"+"\"error\":"+"\"You must log in!\"}");
+			out.println("{"+
+							"\"messageText\":"+"\"You must log in!\","+  
+							"\"messageType\":"+"\"danger\""+
+					   "}");
 			return;
 		}
 		chain.doFilter(request, response); 

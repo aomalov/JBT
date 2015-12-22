@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,37 +41,27 @@ public class LoginServlet {
 	}
 	
 	@POST
-	public Response logon(@FormParam("userName") String userName, 
-						  @FormParam("password") String password, 
-						  @FormParam("clientType") int clientType,
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public RestJsonMessage logon(RestJsonUser aUser,
 						  @Context HttpServletRequest httpRequest,
 						  @Context HttpServletResponse httpResponse) {
 		
-		CouponClientFacade aFacade=null;
-		ClientType loginClientType = null;
-		
+		CouponClientFacade aFacade=null;		
 		
 		try {
 			CouponSystem theCouponius=CouponSystem.getInstance();
 			
-			switch(clientType) {
-				case 1: loginClientType=ClientType.Client;
-					break;
-				case 2: loginClientType=ClientType.Company;
-					break;
-				case 3: loginClientType=ClientType.Admin;
-					break;
-			}
-			aFacade=theCouponius.login(userName, password, loginClientType);
+			aFacade=theCouponius.login(aUser.getUserName(), aUser.getPassword(), ClientType.valueOf(aUser.getClientType()));
 			httpRequest.getSession(true).setAttribute("userFacade", aFacade);
 			httpResponse.sendRedirect("http://localhost:8080/CouponsysREST/");
+			return new RestJsonMessage("success","You are logged in as "+aUser.getUserName());
 		}
 		catch (CouponSystemException | IOException ex)
 		{
 			System.out.println(ex.getMessage());
+			return new RestJsonMessage("danger",ex.getMessage());
 		}
-		
-		return Response.status(200).entity(httpResponse).build();
 	}
 }
 

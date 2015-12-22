@@ -73,7 +73,9 @@
     </div>
         
     <div class="container">
-        <div ng-view>    
+        <div ng-controller="restResponseController">
+            <uib-alert type="{{messageType}}" ng-show="messageText.length>0" close="messageText=''" dismiss-on-timeout="5000">{{messageText}}</uib-alert>
+            <div ng-view></div>
         </div>
     </div>   
        
