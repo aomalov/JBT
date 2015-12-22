@@ -3,16 +3,26 @@
  */
 package com.jbt.jsmith.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author andrew
  *
  *Customer DTO class
  */
+
+@XmlRootElement
 public class Customer {
 
 	private long ID;
 	private String CUST_NAME; 
 	private String PASSWORD;
+	
+	
+	public Customer() {
+		super();
+	}
+	
 	/**
 	 * @param iD
 	 * @param cUST_NAME
