@@ -47,7 +47,7 @@ public class AdminFacade implements CouponClientFacade {
 	public CouponClientFacade login(String name, String password, ClientType type) throws CouponSystemException {
 		//TODO seems to be a missfit so far with this CouponClientFacade interface
 		try {
-			if(Owasp.authenticate(companyDBDAO.getConnectionPool().getConnection(), name, password)) 
+			if(Owasp.authenticate( name, password)) 
 				return this;
 			else 
 				throw new CouponSystemException("Name or password not valid");

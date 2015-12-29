@@ -37,9 +37,9 @@ public class CouponSystem {
 	}
 	
 	private CouponSystem() throws CouponSystemException{
-		this.cleanUpTask=new DailyCouponExpirationTask(TimeUnit.MINUTES,5); //Every 5 minutes clean outdated coupons
+		this.cleanUpTask=new DailyCouponExpirationTask(TimeUnit.MINUTES,15); //Every 5 minutes clean outdated coupons
 		this.cleanupTaskThread=new Thread(this.cleanUpTask);
-		this.cleanupTaskThread.start();
+//		this.cleanupTaskThread.start();
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class CouponSystem {
 	 * @throws CouponSystemException
 	 */
 	public void shutdown() throws CouponSystemException{
-		this.cleanUpTask.stopTask();
+//		this.cleanUpTask.stopTask();
 		ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).closeAllConnections();
 	}
 

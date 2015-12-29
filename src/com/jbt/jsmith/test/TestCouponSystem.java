@@ -52,6 +52,10 @@ public class TestCouponSystem {
 			Customer testCust=new Customer(0, "Customer "+identity_cnt, "1234");
 			admin.createCustomer(testCust);
 			System.out.println("Created customer #"+testCust.getID());
+//			testCust.setPASSWORD("12345");
+//			admin.updateCustomer(testCust);
+//			testCust.setCUST_NAME("new Name");
+//			admin.updateCustomer(testCust);
 			
 			CompanyFacade compFacade=(CompanyFacade)theCouponius.login("Company "+identity_cnt, "1234", ClientType.Company);
 			Coupon testCoupon=new Coupon(0, CouponType.HEALTHCARE, "Coupon "+identity_cnt, "msg", "iMAGE", 2, 15.0, Date.valueOf("2015-1-1"), Date.valueOf("2016-12-1"));

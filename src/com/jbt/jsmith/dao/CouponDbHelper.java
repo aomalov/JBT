@@ -121,13 +121,18 @@ public class CouponDbHelper {
 		long res=0;
 		
 		PreparedStatement pstmt;
+		Connection con=cPool.getConnection();
 		try {
-			pstmt = cPool.getConnection().prepareStatement(sqlQuery);
+			pstmt = con.prepareStatement(sqlQuery);
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next()) res=rs.getLong(fieldName);
 		} catch (SQLException e) {
 			// 
 			throw new CouponSystemException("Error in DB query "+sqlQuery);
+		}
+		finally {
+			if (con!=null)
+				cPool.returnConnection(con);
 		}
 	
 		return res;
@@ -144,6 +149,7 @@ public class CouponDbHelper {
 		long res=0;
 		String sql = null;
 		ConnectionPool cPool=ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+		Connection con=cPool.getConnection();
 		
 		switch (clientType) {
 			case Company:
@@ -159,12 +165,16 @@ public class CouponDbHelper {
 		}
 				
 		try {
-			PreparedStatement pstmt=cPool.getConnection().prepareStatement(sql);
+			PreparedStatement pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, searchVal);
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next()) res=rs.getLong(fieldName);
 		} catch (SQLException e) {
 			throw new CouponSystemException("Error in DB query for field"+fieldName);
+		}
+		finally {
+			if(con!=null)
+				cPool.returnConnection(con);
 		}
 	
 		return res;

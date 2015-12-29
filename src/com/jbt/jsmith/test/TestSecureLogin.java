@@ -34,7 +34,7 @@ public class TestSecureLogin {
 		}
 		try {
 			Owasp.createUser(conn, "company1", "pass_Company1");
-			System.out.println("Authenticated:"+Owasp.authenticate(conn, "company1", "pass_Company1"));
+			System.out.println("Authenticated:"+Owasp.authenticate("company1", "pass_Company1"));
 		}
 		catch (Exception e)
 		{

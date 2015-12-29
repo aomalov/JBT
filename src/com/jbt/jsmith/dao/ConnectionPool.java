@@ -79,7 +79,7 @@ public class ConnectionPool {
 				// 
 				throw new CouponSystemException("Couldn't provide free connection from the pool");
 			}
-		//System.out.println("gave 1 conn from " + freeConnections.size());
+		System.out.println("gave 1 conn from " + freeConnections.size());
 		return freeConnections.poll();
 	}
 	

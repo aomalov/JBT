@@ -47,7 +47,7 @@ public class CustomerFacade implements CouponClientFacade {
 		if(ID>0) innerCustomer=customerDBDAO.read(ID);
 		else throw new CouponSystemException("Customer name at login is not valid");
 		try {
-			if(Owasp.authenticate(customerDBDAO.getConnectionPool().getConnection(), name, password))	
+			if(Owasp.authenticate(name, password))	
 				return this;
 			else throw new CouponSystemException("password not valid");
 		} catch (NoSuchAlgorithmException | SQLException e) {

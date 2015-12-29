@@ -50,7 +50,7 @@ public class CompanyFacade implements CouponClientFacade {
 		if(ID>0) innerCompany=companyDBDAO.read(ID);
 		else throw new CouponSystemException("Company name at login is not valid");
 		try {
-			if(Owasp.authenticate(companyDBDAO.getConnectionPool().getConnection(), name, password))	
+			if(Owasp.authenticate(name, password))	
 				return this;
 			else 
 				throw new CouponSystemException("password not valid");

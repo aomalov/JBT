@@ -11,6 +11,10 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import java.sql.*;
 import java.util.Arrays;
+
+import com.jbt.jsmith.CouponSystemException;
+import com.jbt.jsmith.dao.ConnectionPool;
+
 import java.security.SecureRandom;
 
 public class Owasp {
@@ -31,9 +35,11 @@ public class Owasp {
    *           (Two users with the same login, salt or digested password altered etc.)
    * @throws NoSuchAlgorithmException If the algorithm SHA-1 is not supported by the JVM
    */
-  public static boolean authenticate(Connection con, String login, String password)
+  public static boolean authenticate( String login, String password)
           throws SQLException, NoSuchAlgorithmException{
       boolean authenticated=false;
+      ConnectionPool cPool=null;
+      Connection con=null;
       PreparedStatement ps = null;
       ResultSet rs = null;
       try {
@@ -46,7 +52,9 @@ public class Owasp {
               login="";
               password="";
           }
-
+          
+          cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
+          con=cPool.getConnection();
           ps = con.prepareStatement("SELECT PASSWORD, SALT FROM CREDENTIAL WHERE LOGIN = ?");
           ps.setString(1, login);
           rs = ps.executeQuery();
@@ -75,12 +83,13 @@ public class Owasp {
           byte[] proposedDigest = getHash(ITERATION_NUMBER, password, bSalt);
 
           authenticated = Arrays.equals(proposedDigest, bDigest) && userExist;
-      } catch (IOException ex){
+      } catch (IOException | CouponSystemException ex){
           throw new SQLException("Database inconsistant Salt or Digested Password altered");
       }
       finally{
           close(rs);
           close(ps);
+          if(con!=null) cPool.returnConnection(con);
       }
       return authenticated;
   }
