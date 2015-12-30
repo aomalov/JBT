@@ -6,8 +6,8 @@ package com.jbt.jsmith.test;
 import java.sql.Date;
 
 import com.jbt.jsmith.CouponSystem;
-import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.CouponSystem.ClientType;
+import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.dao.ConnectionPool;
 import com.jbt.jsmith.dao.CouponDbHelper;
 import com.jbt.jsmith.dto.Company;
@@ -44,7 +44,7 @@ public class TestCouponSystem {
 			long identity_cnt=CouponDbHelper.getQueryResultLong("select count(*)+1 as cnt from COMPANY", "cnt", cPool);
 			CouponSystem theCouponius=CouponSystem.getInstance();
 			
-			AdminFacade admin=(AdminFacade)theCouponius.login("Admin", "1234", ClientType.Admin);
+			AdminFacade admin=(AdminFacade)theCouponius.login("Admin", "1234",  ClientType.Admin);
 			Company testComp=new Company(0, "Company "+identity_cnt, "1234", "comp"+identity_cnt+"@companies.com");
 			admin.createCompany(testComp);
 			System.out.println("Created company # "+testComp.getID());

@@ -7,11 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-//TODO normalize these imports with java 7 or java 8 lib compliance
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Base64;
 
 import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.dao.ConnectionPool;
@@ -234,8 +232,7 @@ public class Owasp {
    * @throws IOException
    */
   private static byte[] base64ToByte(String data) throws IOException {
-      BASE64Decoder decoder = new BASE64Decoder();
-      return decoder.decodeBuffer(data);
+      return Base64.getDecoder().decode(data);
   }
 
   /**
@@ -245,8 +242,7 @@ public class Owasp {
    * @throws IOException
    */
   private static String byteToBase64(byte[] data){
-      BASE64Encoder endecoder = new BASE64Encoder();
-      return endecoder.encode(data);
+      return Base64.getEncoder().encodeToString(data);      
   }
 
 

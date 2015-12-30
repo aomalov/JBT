@@ -25,7 +25,7 @@ public class CouponSystem {
 	
 	public enum ClientType {
 		Admin, Company, Client
-	}
+	};
 	
 	/**
 	 * @return the CouponSystem singleton method
