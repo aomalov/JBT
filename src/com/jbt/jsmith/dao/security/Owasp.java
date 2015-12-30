@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+//TODO normalize these imports with java 7 or java 8 lib compliance
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import java.sql.*;
