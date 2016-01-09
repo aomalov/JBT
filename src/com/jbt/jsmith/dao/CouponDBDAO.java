@@ -81,8 +81,8 @@ public class CouponDBDAO implements CouponDAO {
 				res.setMESSAGE(rs.getString("MESSAGE"));
 				res.setAMOUNT(rs.getInt("AMOUNT"));
 				res.setPRICE(rs.getDouble("PRICE"));
-				res.setSTART_DATE(rs.getDate("START_DATE"));
-				res.setEND_DATE(rs.getDate("END_DATE"));
+				res.setSqlSTART_DATE(rs.getDate("START_DATE"));
+				res.setSqlEND_DATE(rs.getDate("END_DATE"));
 			}
 			else throw new CouponSystemException("No coupon exists with ID="+ID);
 		} catch (SQLException e) {

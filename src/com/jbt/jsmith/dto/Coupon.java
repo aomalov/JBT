@@ -4,6 +4,10 @@
 package com.jbt.jsmith.dto;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author andrew
@@ -11,6 +15,7 @@ import java.sql.Date;
  * Coupon DTO class
  *
  */
+@XmlRootElement
 public class Coupon {
 	
 	public enum CouponType {
@@ -26,6 +31,8 @@ public class Coupon {
 	private Double PRICE ;
 	private Date START_DATE ;
 	private Date END_DATE ;
+	private SimpleDateFormat formatter;
+	
 	/**
 	 * @param iD
 	 * @param tYPE
@@ -49,6 +56,17 @@ public class Coupon {
 		PRICE = pRICE;
 		START_DATE = sTART_DATE;
 		END_DATE = eND_DATE;
+		this.formatter = new SimpleDateFormat("mm-dd-yyyy");
+		System.out.println("Coupon.Coupon(base)");
+	}
+	
+	/**
+	 * 
+	 */
+	public Coupon() {
+		super();
+		this.formatter = new SimpleDateFormat("mm-dd-yyyy");
+		System.out.println("Coupon.Coupon(empty)");
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -193,21 +211,33 @@ public class Coupon {
 	/**
 	 * @param sTART_DATE the sTART_DATE to set
 	 */
-	public void setSTART_DATE(Date sTART_DATE) {
+	public void setSqlSTART_DATE(Date sTART_DATE) {
 		START_DATE = sTART_DATE;
 	}
+	
+	public void setSTART_DATE(String sTART_DATE) throws ParseException {
+		java.util.Date tmp=formatter.parse(sTART_DATE);
+		START_DATE = Date.valueOf(sTART_DATE);
+	}
+	
 	/**
 	 * @return the eND_DATE
 	 */
 	public Date getEND_DATE() {
+		System.out.println("Coupon.getEND_DATE()");
 		return END_DATE;
 	}
 	/**
 	 * @param eND_DATE the eND_DATE to set
 	 */
-	public void setEND_DATE(Date eND_DATE) {
+	public void setSqlEND_DATE(Date eND_DATE) {
+		System.out.println("Coupon.setSqlEND_DATE()");
 		END_DATE = eND_DATE;
 	}
 
+	public void setEND_DATE(String eND_DATE) throws ParseException {
+		System.out.println("Coupon.setEND_DATE()");
+		END_DATE = Date.valueOf(eND_DATE);
+	}
 	
 }

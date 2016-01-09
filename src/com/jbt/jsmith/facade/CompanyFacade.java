@@ -81,7 +81,7 @@ public class CompanyFacade implements CouponClientFacade {
 		Coupon safeCopy=couponDBDAO.read(aCoupon.getID());
 		//Allow to change only price and validity date
 		safeCopy.setPRICE(aCoupon.getPRICE());
-		safeCopy.setEND_DATE(aCoupon.getEND_DATE());
+		safeCopy.setSqlEND_DATE(aCoupon.getEND_DATE());
 		couponDBDAO.update(safeCopy);		
 	}
 	
