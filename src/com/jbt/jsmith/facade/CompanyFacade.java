@@ -79,9 +79,11 @@ public class CompanyFacade implements CouponClientFacade {
 	
 	public void updateCoupon(Coupon aCoupon) throws CouponSystemException {
 		Coupon safeCopy=couponDBDAO.read(aCoupon.getID());
-		//Allow to change only price and validity date
+		//Allow to change only price and validity date 
+		//And the image !!!
 		safeCopy.setPRICE(aCoupon.getPRICE());
 		safeCopy.setSqlEND_DATE(aCoupon.getEND_DATE());
+		safeCopy.setIMAGE(aCoupon.getIMAGE());
 		couponDBDAO.update(safeCopy);		
 	}
 	
