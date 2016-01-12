@@ -57,7 +57,6 @@ public class Coupon {
 		START_DATE = sTART_DATE;
 		END_DATE = eND_DATE;
 		this.formatter = new SimpleDateFormat("mm-dd-yyyy");
-		System.out.println("Coupon.Coupon(base)");
 	}
 	
 	/**
@@ -66,7 +65,6 @@ public class Coupon {
 	public Coupon() {
 		super();
 		this.formatter = new SimpleDateFormat("mm-dd-yyyy");
-		System.out.println("Coupon.Coupon(empty)");
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -224,19 +222,16 @@ public class Coupon {
 	 * @return the eND_DATE
 	 */
 	public Date getEND_DATE() {
-		System.out.println("Coupon.getEND_DATE()");
 		return END_DATE;
 	}
 	/**
 	 * @param eND_DATE the eND_DATE to set
 	 */
 	public void setSqlEND_DATE(Date eND_DATE) {
-		System.out.println("Coupon.setSqlEND_DATE()");
 		END_DATE = eND_DATE;
 	}
 
 	public void setEND_DATE(String eND_DATE) throws ParseException {
-		System.out.println("Coupon.setEND_DATE()");
 		END_DATE = Date.valueOf(eND_DATE);
 	}
 	

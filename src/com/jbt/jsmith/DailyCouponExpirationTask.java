@@ -38,7 +38,7 @@ public class DailyCouponExpirationTask implements Runnable {
 			Date today=new Date(GregorianCalendar.getInstance().getTimeInMillis());
 			if(lastRun==null || CouponDbHelper.computeDetailedDateDiff(today, lastRun).get(tuPeriod)>periodValue) {
 				try {
-					for(Coupon outdatedCoupon: couponDBDAO.realAllByEndDate(today)) {
+					for(Coupon outdatedCoupon: couponDBDAO.realAllOutdated(today)) {
 						custcouponDBDAO.deleteAllCoupons(outdatedCoupon.getID()); //Delete from all customers
 						compcouponDBDAO.deleteAllCoupons(outdatedCoupon.getID()); //Delete from company
 						couponDBDAO.delete(outdatedCoupon);						  //Delete the entity record

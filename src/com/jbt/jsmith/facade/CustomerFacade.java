@@ -4,6 +4,7 @@
 package com.jbt.jsmith.facade;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,9 +65,15 @@ public class CustomerFacade implements CouponClientFacade {
 		if(safeCopy.getAMOUNT()>0) {
 			customerCouponDBDAO.create(innerCustomer.getID(), aCoupon.getID());
 			//Update the number of coupons available at the company resourse stock
+			//TODO decrement is not thread-safe  - should be done on the DB server side
 			safeCopy.setAMOUNT(aCoupon.getAMOUNT()-1);
 			couponDBDAO.update(safeCopy);			
 		}
+		else throw new CouponSystemException("No more coupons available of type "+aCoupon.getTITLE());
+	}
+	
+	public Coupon getCoupon(long ID) throws CouponSystemException {
+		return couponDBDAO.read(ID);
 	}
 	
 	public Collection<Coupon> getAllPurchased() throws CouponSystemException {
@@ -93,7 +100,14 @@ public class CustomerFacade implements CouponClientFacade {
 		return res; 
 	}
 	
-	
+	public Collection<Coupon> getCouponsOnSale() throws CouponSystemException {
+		Collection<Coupon> res=new ArrayList<>();
+		
+		for(Coupon coupon: couponDBDAO.realAllValidAvailable(new Date(System.currentTimeMillis()))) 
+			res.add(coupon);
+		
+		return res;
+	}
 	
 	
 }

@@ -16,5 +16,6 @@ import com.jbt.jsmith.dto.Coupon;
 public interface CouponDAO extends entityDAO<Coupon> {
 
 	Collection<Coupon> realAllByType(Coupon.CouponType TYPE) throws CouponSystemException;
-	Collection<Coupon> realAllByEndDate(Date couponDate) throws CouponSystemException;
+	Collection<Coupon> realAllOutdated(Date couponDate) throws CouponSystemException;
+	Collection<Coupon> realAllValidAvailable(Date couponDate) throws CouponSystemException;
 }
