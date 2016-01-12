@@ -100,10 +100,10 @@ public class CustomerFacade implements CouponClientFacade {
 		return res; 
 	}
 	
-	public Collection<Coupon> getCouponsOnSale() throws CouponSystemException {
+	public Collection<Coupon> getCouponsOnSale(String pattern) throws CouponSystemException {
 		Collection<Coupon> res=new ArrayList<>();
 		
-		for(Coupon coupon: couponDBDAO.realAllValidAvailable(new Date(System.currentTimeMillis()))) 
+		for(Coupon coupon: couponDBDAO.readAllValidAvailable(new Date(System.currentTimeMillis()),pattern)) 
 			res.add(coupon);
 		
 		return res;

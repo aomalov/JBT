@@ -17,5 +17,5 @@ public interface CouponDAO extends entityDAO<Coupon> {
 
 	Collection<Coupon> realAllByType(Coupon.CouponType TYPE) throws CouponSystemException;
 	Collection<Coupon> realAllOutdated(Date couponDate) throws CouponSystemException;
-	Collection<Coupon> realAllValidAvailable(Date couponDate) throws CouponSystemException;
+	Collection<Coupon> readAllValidAvailable(Date couponDate, String pattern) throws CouponSystemException;
 }

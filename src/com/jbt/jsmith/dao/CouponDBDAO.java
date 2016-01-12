@@ -230,12 +230,13 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public Collection<Coupon> realAllValidAvailable(Date couponDate) throws CouponSystemException {
+	public Collection<Coupon> readAllValidAvailable(Date couponDate, String pattern) throws CouponSystemException {
 		Connection con=cPool.getConnection();
 		Collection<Coupon> res=new ArrayList<>();
 		try {
-			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where END_DATE>? and AMOUNT>0");
+			PreparedStatement pstmt = con.prepareStatement("select ID,TITLE,MESSAGE,IMAGE,TYPE,AMOUNT,PRICE,START_DATE,END_DATE from COUPON where END_DATE>? and AMOUNT>0 and TITLE like ?");
 			pstmt.setDate(1, couponDate);
+			pstmt.setString(2, ((pattern!=null ) && pattern.length()>0) ? "%"+pattern+"%" : "%" );
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next())
 			{

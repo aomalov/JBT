@@ -70,7 +70,7 @@ public class TestCouponSystem {
 			System.out.println("All coupons for customer "+testCust.getCUST_NAME());			
 			for(Coupon c:custFacade.getAllPurchased()) System.out.println(c);
 			System.out.println("All coupons available to purchase for customer "+testCust.getCUST_NAME());			
-			for(Coupon c:custFacade.getCouponsOnSale()) System.out.println(c);
+			for(Coupon c:custFacade.getCouponsOnSale(null)) System.out.println(c);
 			
 			Thread.sleep(1500);
 			theCouponius.shutdown();
