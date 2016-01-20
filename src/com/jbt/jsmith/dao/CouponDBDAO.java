@@ -240,7 +240,7 @@ public class CouponDBDAO implements CouponDAO {
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next())
 			{
-				res.add(new Coupon(rs.getLong("ID"),CouponType.valueOf(rs.getString("TYPE")),rs.getString("TITLE"),rs.getString("IMAGE"),rs.getString("MESSAGE"),rs.getInt("AMOUNT"),
+				res.add(new Coupon( rs.getLong("ID"), CouponType.valueOf(rs.getString("TYPE")),rs.getString("TITLE"),rs.getString("MESSAGE"),rs.getString("IMAGE"),rs.getInt("AMOUNT"),
 						rs.getDouble("PRICE"),rs.getDate("START_DATE"),rs.getDate("END_DATE")));
 			}
 		} catch (SQLException e) {
