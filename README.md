@@ -35,3 +35,8 @@ run "DBCreator.java" to initialize the CouponDB database
 run "TestCouponSystem.java" to populate the database and perform end-to-end testing
 discover multithread connection pool test and unit tests  
 ```
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+
+   [Phase 1 - Coupon DB]: <https://github.com/aomalov/JBT>
+   [Security]: <https://www.owasp.org/index.php/Hashing_Java>
