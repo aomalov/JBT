@@ -24,3 +24,14 @@ Phase 1 represents the storage and business rules layer of the project
   - Single entry point to the **Coupon Dibi** is the *CouponSystem* singleton. Login gives successful user a facade and a connection pool of 20 parallel sessions to the database.
   - All facade methods throw single type of Exception to provide for unified error handling at the presentation layer
   - A background routine acompanies the *CouponSystem*. A separate thread cleans up the database, safely removing the outdated coupons
+  - `JUnit 4` is used to automate granular tests: get asserted results and catch exceptions if appropriate 
+ 
+  ### Installation and Testing
+
+```sh
+launch DerbyDB database
+configure "defDriverName", "defDbUrl" in "ConnectionPool.java" 
+run "DBCreator.java" to initialize the CouponDB database
+run "TestCouponSystem.java" to populate the database and perform end-to-end testing
+discover multithread connection pool test and unit tests  
+```
