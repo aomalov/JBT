@@ -7,7 +7,7 @@ Phase 1 represents the storage and business rules layer of the project
 > **Customers** register with the app and benefit from coupons on sale.
 > **App hosting** monetizes the marketing fee giving ads to the companies and provideng them with a broader reach and possible leads generator
 
-***
+
 
 ## Technical description
 
