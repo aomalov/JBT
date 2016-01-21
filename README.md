@@ -21,4 +21,6 @@ Phase 1 represents the storage and business rules layer of the project
     - whatever ...
   - Threadsafe ``Connection pool`` is provided for DAO activities in order to elevate the storage througput 
   - `Facade` classes encompass business logic at the moment of data storage and retrieval. They encapsulate DAO and DTO to allow for an easy API - create , read, update and delete (`CRUD`)
-  - Single entry point to the **Coupon Dibi** is the CouponSystem singleton. Login gives successful user a facade and a connection pool of 20 parallel session to the database.
+  - Single entry point to the **Coupon Dibi** is the *CouponSystem* singleton. Login gives successful user a facade and a connection pool of 20 parallel sessions to the database.
+  - All facade methods throw single type of Exception to provide for unified error handling at the presentation layer
+  - A background routine acompanies the *CouponSystem*. A separate thread cleans up the database, safely removing the outdated coupons
