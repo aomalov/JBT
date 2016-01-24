@@ -34,7 +34,7 @@ public class Owasp {
    *           (Two users with the same login, salt or digested password altered etc.)
    * @throws NoSuchAlgorithmException If the algorithm SHA-1 is not supported by the JVM
    */
-  public static boolean authenticate( String login, String password)
+  public static boolean authenticate( String login, String password,String clientType)
           throws SQLException, NoSuchAlgorithmException{
       boolean authenticated=false;
       ConnectionPool cPool=null;
@@ -54,8 +54,9 @@ public class Owasp {
           
           cPool = ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl);
           con=cPool.getConnection();
-          ps = con.prepareStatement("SELECT PASSWORD, SALT FROM CREDENTIAL WHERE LOGIN = ?");
+          ps = con.prepareStatement("SELECT PASSWORD, SALT FROM CREDENTIAL WHERE LOGIN = ? and CLIENT_TYPE=?");
           ps.setString(1, login);
+          ps.setString(2, clientType);
           rs = ps.executeQuery();
           String digest, salt;
           if (rs.next()) {
@@ -105,7 +106,7 @@ public class Owasp {
    * @throws NoSuchAlgorithmException If the algorithm SHA-1 or the SecureRandom is not supported by the JVM
  * @throws UnsupportedEncodingException 
    */
-  public static boolean createUser(Connection con, String login, String password)
+  public static boolean createUser(Connection con, String login, String password, String clientType)
           throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException
   {
       PreparedStatement ps = null;
@@ -121,10 +122,11 @@ public class Owasp {
               String sDigest = byteToBase64(bDigest);
               String sSalt = byteToBase64(bSalt);
 
-              ps = con.prepareStatement("INSERT INTO CREDENTIAL (LOGIN, PASSWORD, SALT) VALUES (?,?,?)");
+              ps = con.prepareStatement("INSERT INTO CREDENTIAL (LOGIN, PASSWORD, SALT, CLIENT_TYPE) VALUES (?,?,?,?)");
               ps.setString(1,login);
               ps.setString(2,sDigest);
               ps.setString(3,sSalt);
+              ps.setString(4,clientType);
               ps.executeUpdate();
               return true;
           } else {
@@ -136,14 +138,15 @@ public class Owasp {
   }
   
   
-  public static boolean dropUser(Connection con, String login)
+  public static boolean dropUser(Connection con, String login, String clientType)
           throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException
   {
       PreparedStatement ps = null;
       try {
           if (login!=null){
-              ps = con.prepareStatement("DELETE FROM CREDENTIAL WHERE LOGIN=?");
+              ps = con.prepareStatement("DELETE FROM CREDENTIAL WHERE LOGIN=? and CLIENT_TYPE=?");
               ps.setString(1,login);
+              ps.setString(2,clientType);
               ps.executeUpdate();
               return true;
           } else {
@@ -182,7 +185,7 @@ public class Owasp {
       Statement st = null;
       try {
           st = con.createStatement();
-          st.execute("CREATE TABLE CREDENTIAL (LOGIN VARCHAR(100) PRIMARY KEY, PASSWORD VARCHAR(32) NOT NULL, SALT VARCHAR(32) NOT NULL)");
+          st.execute("CREATE TABLE CREDENTIAL (LOGIN VARCHAR(100) NOT NULL, CLIENT_TYPE VARCHAR(32) NOT NULL, PASSWORD VARCHAR(32) NOT NULL, SALT VARCHAR(32) NOT NULL , PRIMARY KEY(LOGIN,CLIENT_TYPE) )");
       } finally {
           close(st);
       }

@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
+import com.jbt.jsmith.CouponSystem.ClientType;
 import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.dao.ConnectionPool;
 import com.jbt.jsmith.dao.CouponDbHelper;
@@ -28,7 +29,7 @@ public class DBCreator {
 		try {
 			CouponDbHelper.createTables(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
 			Owasp.createTable(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection());
-			Owasp.createUser(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection(), "Admin", "1234");
+			Owasp.createUser(ConnectionPool.getInstance(ConnectionPool.defDriverName, ConnectionPool.defDbUrl).getConnection(), "Admin", "1234",ClientType.Admin.toString());
 		} catch (CouponSystemException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

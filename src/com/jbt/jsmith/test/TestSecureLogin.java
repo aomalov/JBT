@@ -6,6 +6,7 @@ package com.jbt.jsmith.test;
 import java.sql.Connection;
 
 import com.jbt.jsmith.CouponSystemException;
+import com.jbt.jsmith.CouponSystem.ClientType;
 import com.jbt.jsmith.dao.ConnectionPool;
 import com.jbt.jsmith.dao.security.Owasp;
 
@@ -33,8 +34,8 @@ public class TestSecureLogin {
 			System.out.println(e.getMessage());
 		}
 		try {
-			Owasp.createUser(conn, "company1", "pass_Company1");
-			System.out.println("Authenticated:"+Owasp.authenticate("company1", "pass_Company1"));
+			Owasp.createUser(conn, "company1", "pass_Company1", ClientType.Company.toString());
+			System.out.println("Authenticated:"+Owasp.authenticate("company1", "pass_Company1", ClientType.Company.toString()));
 		}
 		catch (Exception e)
 		{

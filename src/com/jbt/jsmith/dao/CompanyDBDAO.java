@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.jbt.jsmith.CouponSystemException;
+import com.jbt.jsmith.CouponSystem.ClientType;
 import com.jbt.jsmith.dao.security.Owasp;
 import com.jbt.jsmith.dto.Company;
 import com.jbt.jsmith.dto.Coupon;
@@ -58,7 +59,7 @@ public final class CompanyDBDAO implements CompanyDAO {
 			pstmt.setString(1, entity.getCOMP_NAME());
 			pstmt.setString(2, entity.getEMAIL());
 			res=CouponDbHelper.getDBIdentityField(pstmt);
-			Owasp.createUser(con, entity.getCOMP_NAME(), entity.getPASSWORD());
+			Owasp.createUser(con, entity.getCOMP_NAME(), entity.getPASSWORD(),ClientType.Company.toString());
 		} 
 		catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't insert into Company DB table");		
@@ -107,8 +108,8 @@ public final class CompanyDBDAO implements CompanyDAO {
 			pstmt.setString(1, entity.getCOMP_NAME());
 			pstmt.setString(2, entity.getEMAIL());
 			pstmt.executeUpdate();
-			Owasp.dropUser(con, entity.getCOMP_NAME());
-			Owasp.createUser(con, entity.getCOMP_NAME(),entity.getPASSWORD());
+			Owasp.dropUser(con, entity.getCOMP_NAME(),ClientType.Company.toString());
+			Owasp.createUser(con, entity.getCOMP_NAME(),entity.getPASSWORD(),ClientType.Company.toString());
 		} 
 		catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't update Company DB table");		
@@ -154,7 +155,7 @@ public final class CompanyDBDAO implements CompanyDAO {
 			PreparedStatement pstmt = con.prepareStatement("delete from Company where ID=?");
 			pstmt.setLong(1, entity.getID());
 			pstmt.executeUpdate();
-			Owasp.dropUser(con, entity.getCOMP_NAME());
+			Owasp.dropUser(con, entity.getCOMP_NAME(),ClientType.Company.toString());
 		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't delete from Company DB table");		
 		}

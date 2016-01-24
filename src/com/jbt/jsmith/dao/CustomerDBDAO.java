@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.jbt.jsmith.CouponSystem.ClientType;
 import com.jbt.jsmith.CouponSystemException;
 import com.jbt.jsmith.dao.security.Owasp;
 import com.jbt.jsmith.dto.Coupon;
@@ -44,7 +45,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			PreparedStatement pstmt = con.prepareStatement("insert into CUSTOMER(CUST_NAME) values(?)",Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, entity.getCUST_NAME());
 			res=CouponDbHelper.getDBIdentityField(pstmt);
-			Owasp.createUser(con, entity.getCUST_NAME(), entity.getPASSWORD());
+			Owasp.createUser(con, entity.getCUST_NAME(), entity.getPASSWORD(),ClientType.Client.toString());
 		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't insert into Customer DB table");		
 		}
@@ -126,8 +127,8 @@ public class CustomerDBDAO implements CustomerDAO {
 			pstmt.setLong(2, entity.getID());
 			pstmt.setString(1, entity.getCUST_NAME());
 			pstmt.executeUpdate();
-			Owasp.dropUser(con, entity.getCUST_NAME());
-			Owasp.createUser(con, entity.getCUST_NAME(),entity.getPASSWORD());
+			Owasp.dropUser(con, entity.getCUST_NAME(),ClientType.Client.toString());
+			Owasp.createUser(con, entity.getCUST_NAME(),entity.getPASSWORD(),ClientType.Client.toString());
 		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't update Customer DB table");		
 		}
@@ -147,7 +148,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			PreparedStatement pstmt = con.prepareStatement("delete from CUSTOMER where ID=?");
 			pstmt.setLong(1, entity.getID());
 			pstmt.executeUpdate();
-			Owasp.dropUser(con, entity.getCUST_NAME());
+			Owasp.dropUser(con, entity.getCUST_NAME(),ClientType.Client.toString());
 		} catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new CouponSystemException("Couldn't delete from Customer DB table");		
 		}
