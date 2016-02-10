@@ -38,6 +38,18 @@ public class CustomerFacade implements CouponClientFacade {
 		this.couponDBDAO=new CouponDBDAO();
 	}
 	
+	public long getId() {
+		if(innerCustomer !=null)
+			return innerCustomer.getID();
+		return 0;
+	}
+
+	public String getName() {
+		if(innerCustomer!= null)
+			return innerCustomer.getCUST_NAME();
+		return "";
+	}
+	
 	/* (non-Javadoc)
 	 * @see jsmith.jbt.com.FACADE.CouponClientFacade#login(java.lang.String, java.lang.String, jsmith.jbt.com.FACADE.CouponSystem.ClientType)
 	 */

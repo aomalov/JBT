@@ -60,6 +60,18 @@ public class CompanyFacade implements CouponClientFacade {
 		}
 	}
 	
+	public long getId() {
+		if(innerCompany!=null)
+			return innerCompany.getID();
+		return 0;
+	}
+	
+	public String getName() {
+		if(innerCompany!= null)
+			return innerCompany.getCOMP_NAME();
+		return "";
+	}
+	
 	public void createCoupon(Coupon aCoupon) throws CouponSystemException {
 		//no such name
 		if(!couponDBDAO.lookupByName(aCoupon.getTITLE())) {
